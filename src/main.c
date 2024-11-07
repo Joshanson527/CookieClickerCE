@@ -14,29 +14,33 @@
  
 #include "gfx/gfx.h"
 
+uint64_t quintillion = 1000000000000000000;
+uint64_t quadrillion = 1000000000000000;
+uint64_t trillion = 1000000000000;
+
 bool click = false;
 bool draw = true;
 uint64_t cookies = 0;
 uint8_t scale = 2;
-uint16_t cps = 0;
-uint16_t cpc = 100;
+uint64_t cps = 0;
+uint64_t cpc = 0;
 char text[64];
 
 gfx_sprite_t *cookie;
 
 void textBeautifier(void) {
-    if (cookies >= 1000000000000000000) {
-        sprintf(text, "%Lf quintillion cookies", (long double)cookies / 1000000000000000000);
-    } else if (cookies >= 1000000000000000) {
-        sprintf(text, "%Lf quadrillion cookies", (long double)cookies / 1000000000000000);
-    } else if (cookies >= 1000000000000) {
-        sprintf(text, "%Lf trillion cookies", (long double)cookies / 1000000000000);
+    if (cookies >= quintillion) {
+        sprintf(text, "%.2f quintillion cookies", (double)cookies / quintillion);
+    } else if (cookies >= quadrillion) {
+        sprintf(text, "%.2f quadrillion cookies", (double)cookies / quadrillion);
+    } else if (cookies >= trillion) {
+        sprintf(text, "%.2f trillion cookies", (double)cookies / trillion);
     } else if (cookies >= 1000000000) {
-        sprintf(text, "%lf billion cookies", (double)cookies / 1000000000);
+        sprintf(text, "%.2f billion cookies", (double)cookies / 1000000000);
     } else if (cookies >= 1000000) {
-        sprintf(text, "%lf million cookies", (double)cookies / 1000000);
+        sprintf(text, "%.2f million cookies", (double)cookies / 1000000);
     } else if (cookies >= 1000) {
-        sprintf(text, "%lf thousand cookies", (double)cookies / 1000);
+        sprintf(text, "%.2f thousand cookies", (double)cookies / 1000);
     } else if (cookies != 1) {
         sprintf(text, "%llu cookies", cookies);
     } else {
@@ -63,7 +67,7 @@ void redraw(void) {
     gfx_ScaledTransparentSprite_NoClip(cookie, 160 - (16 * scale), 120 - (16 * scale), scale, scale);
 
     textBeautifier();
-    unsigned int width = gfx_GetStringWidth(text) / 2;
+    uint8_t width = gfx_GetStringWidth(text) / 2;
     gfx_PrintStringXY(text, 160 - width, 10);
 
     gfx_SwapDraw();
@@ -74,7 +78,11 @@ void handle_keypresses(void) {
     kb_Scan();
 
     if ((kb_Data[1] & kb_2nd) && !click) {
-        cookies += cpc;
+        if ((cookies + cpc) > quintillion) {
+            cookies = quintillion;
+        } else {
+            cookies += cpc;
+        }
         click = true;
         draw = true;
     }
@@ -85,7 +93,6 @@ void handle_keypresses(void) {
         click = false;
     }
 }
-
 
 
 int main(void) {

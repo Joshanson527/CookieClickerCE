@@ -3,83 +3,73 @@
 	section	.text,"ax",@progbits
 	public	_textBeautifier
 _textBeautifier:
-	ld	hl, -9
+	ld	hl, -18
 	call	__frameset
 	ld	iy, _cookies
-	ld.sis	bc, 3552
-	ld	de, (_cookies)
+	ld	hl, (_cookies)
+	ld	(ix - 9), hl
 	ld	hl, (_cookies+3)
-	lea	iy, iy + 6
-	ld	iy, (iy)
-	ld	(ix - 3), iy
-	push	iy
 	ld	(ix - 6), hl
+	lea	hl, iy + 6
+	ld	hl, (hl)
+	ld	(ix - 3), hl
+	ld	bc, (_quintillion)
+	ld	de, (_quintillion+3)
+	ld	iy, _quintillion
+	lea	hl, iy + 6
+	ld	hl, (hl)
+	ld	(ix - 18), hl
 	push	hl
-	ld	(ix - 9), de
+	ld	(ix - 15), de
 	push	de
-	ld	hl, 6553599
-	ld	de, -4803673
-	call	__llcmpu
-	pop	hl
-	pop	hl
-	pop	hl
-	jp	nc, BB0_2
+	ld	(ix - 12), bc
+	push	bc
 	ld	hl, (ix - 9)
 	ld	de, (ix - 6)
 	ld	bc, (ix - 3)
-	call	__ulltod
-	ld	iy, 17323
-	push	iy
-	ld	iy, -4100761
-	push	iy
-	ld	iy, 5163008
-	push	iy
-	call	__ddiv
-	pop	iy
-	pop	iy
-	pop	iy
-	push	bc
-	push	de
-	push	hl
-	ld	hl, _.str
-	jp	BB0_6
-BB0_2:
-	ld	hl, -3768321
-	ld	de, -7504220
-	ld.sis	bc, 3
-	ld	iy, (ix - 3)
-	push	iy
-	ld	iy, (ix - 6)
-	push	iy
-	ld	iy, (ix - 9)
-	push	iy
 	call	__llcmpu
 	pop	hl
 	pop	hl
 	pop	hl
-	jp	nc, BB0_4
-	lea	hl, iy
+	jp	nc, BB0_5
+	ld	iy, _quadrillion
+	ld	de, (_quadrillion)
+	ld	bc, (_quadrillion+3)
+	lea	hl, iy + 6
+	ld	iy, (hl)
+	push	iy
+	ld	(ix - 15), bc
+	push	bc
+	ld	(ix - 12), de
+	push	de
+	ld	hl, (ix - 9)
 	ld	de, (ix - 6)
 	ld	bc, (ix - 3)
-	call	__ulltod
-	ld	iy, 17164
+	call	__llcmpu
+	pop	hl
+	pop	hl
+	pop	hl
+	jp	nc, BB0_6
+	ld	iy, _trillion
+	ld	de, (_trillion)
+	ld	bc, (_trillion+3)
+	lea	hl, iy + 6
+	ld	iy, (hl)
 	push	iy
-	ld	iy, 7075110
-	push	iy
-	ld	iy, 3407872
-	push	iy
-	call	__ddiv
-	pop	iy
-	pop	iy
-	pop	iy
+	ld	(ix - 15), bc
 	push	bc
+	ld	(ix - 12), de
 	push	de
-	push	hl
-	ld	hl, _.str.1
-	jp	BB0_6
-BB0_4:
-	ld	hl, -5959681
-	ld	de, 59604
+	ld	hl, (ix - 9)
+	ld	de, (ix - 6)
+	ld	bc, (ix - 3)
+	call	__llcmpu
+	pop	hl
+	pop	hl
+	pop	hl
+	jp	nc, BB0_7
+	ld	hl, -6632961
+	ld	de, 59
 	ld.sis	bc, 0
 	ld	iy, (ix - 3)
 	push	iy
@@ -91,86 +81,8 @@ BB0_4:
 	pop	hl
 	pop	hl
 	pop	hl
-	jp	nc, BB0_9
-	lea	hl, iy
-	ld	de, (ix - 6)
-	ld	bc, (ix - 3)
-	call	__ulltod
-	ld	iy, 17005
-	push	iy
-	ld	iy, 1741986
-	push	iy
-	ld	iy, 0
-	push	iy
-	call	__ddiv
-	pop	iy
-	pop	iy
-	pop	iy
-	push	bc
-	push	de
-	push	hl
-	ld	hl, _.str.2
-BB0_6:
-	push	hl
-	ld	hl, _text
-	push	hl
-BB0_7:
-	call	_sprintf
-	pop	hl
-BB0_8:
-	pop	hl
-	pop	hl
-	pop	hl
-	pop	hl
-	ld	sp, ix
-	pop	ix
-	ret
-BB0_9:
-	ld	hl, -6632961
-	ld	de, 59
-	ld	iy, (ix - 3)
-	push	iy
-	ld	iy, (ix - 6)
-	push	iy
-	ld	iy, (ix - 9)
-	push	iy
-	call	__llcmpu
-	pop	hl
-	pop	hl
-	pop	hl
 	jp	nc, BB0_11
-	lea	hl, iy
-	ld	de, (ix - 6)
-	ld	bc, (ix - 3)
-	call	__ulltof
-	push	hl
-	pop	bc
-	ld	a, e
-	ld	hl, 7236392
-	ld	e, 78
-	call	__fdiv
-	ld	l, a
-	push	hl
-	push	bc
-	ld	hl, _.str.3
-	push	hl
-	ld	hl, _text
-	push	hl
-	jp	BB0_16
-BB0_11:
-	ld	hl, 999999
-	ld	de, (ix - 3)
-	push	de
-	ld	de, (ix - 6)
-	push	de
-	push	iy
-	ld	de, 0
-	call	__llcmpu
-	pop	hl
-	pop	hl
-	pop	hl
-	ld	iy, _text
-	jp	nc, BB0_13
+	ld	iy, 7236392
 	ld	hl, (ix - 9)
 	ld	de, (ix - 6)
 	ld	bc, (ix - 3)
@@ -178,14 +90,115 @@ BB0_11:
 	push	hl
 	pop	bc
 	ld	a, e
-	ld	hl, 7611392
+	lea	hl, iy
+	ld	e, 78
+	call	__fdiv
+	ld	l, a
+	push	hl
+	push	bc
+	ld	hl, _.str.3
+	jp	BB0_8
+BB0_5:
+	ld	iy, _.str
+	ld	hl, (ix - 9)
+	ld	de, (ix - 6)
+	ld	bc, (ix - 3)
+	call	__ulltof
+	ld	(ix - 3), hl
+	ld	a, e
+	ld	hl, (ix - 12)
+	ld	de, (ix - 15)
+	ld	bc, (ix - 18)
+	call	__ulltof
+	ld	bc, (ix - 3)
+	call	__fdiv
+	ld	l, a
+	push	hl
+	push	bc
+	push	iy
+	jp	BB0_9
+BB0_6:
+	ld	hl, (ix - 9)
+	ld	de, (ix - 6)
+	ld	bc, (ix - 3)
+	call	__ulltof
+	ld	(ix - 3), hl
+	ld	a, e
+	ld	hl, (ix - 12)
+	ld	de, (ix - 15)
+	ld	c, iyl
+	ld	b, iyh
+	call	__ulltof
+	ld	bc, (ix - 3)
+	call	__fdiv
+	ld	l, a
+	push	hl
+	push	bc
+	ld	hl, _.str.1
+	jp	BB0_8
+BB0_7:
+	ld	hl, (ix - 9)
+	ld	de, (ix - 6)
+	ld	bc, (ix - 3)
+	call	__ulltof
+	ld	(ix - 3), hl
+	ld	a, e
+	ld	hl, (ix - 12)
+	ld	de, (ix - 15)
+	ld	c, iyl
+	ld	b, iyh
+	call	__ulltof
+	ld	bc, (ix - 3)
+	call	__fdiv
+	ld	l, a
+	push	hl
+	push	bc
+	ld	hl, _.str.2
+BB0_8:
+	push	hl
+BB0_9:
+	ld	hl, _text
+	push	hl
+	call	_sprintf
+BB0_10:
+	pop	hl
+	pop	hl
+	pop	hl
+	pop	hl
+	ld	sp, ix
+	pop	ix
+	ret
+BB0_11:
+	ld	hl, 999999
+	ld	de, (ix - 3)
+	push	de
+	ld	de, (ix - 6)
+	push	de
+	ld	de, (ix - 9)
+	push	de
+	ld	iy, 0
+	lea	de, iy
+	call	__llcmpu
+	pop	hl
+	pop	hl
+	pop	hl
+	jp	nc, BB0_13
+	ld	iy, 7611392
+	ld	hl, (ix - 9)
+	ld	de, (ix - 6)
+	ld	bc, (ix - 3)
+	call	__ulltof
+	push	hl
+	pop	bc
+	ld	a, e
+	lea	hl, iy
 	ld	e, 73
 	call	__fdiv
 	ld	l, a
 	push	hl
 	push	bc
 	ld	hl, _.str.4
-	jp	BB0_15
+	jp	BB0_8
 BB0_13:
 	ld	hl, 999
 	ld	de, (ix - 3)
@@ -194,12 +207,13 @@ BB0_13:
 	push	de
 	ld	de, (ix - 9)
 	push	de
-	ld	de, 0
+	lea	de, iy
 	call	__llcmpu
 	pop	hl
 	pop	hl
 	pop	hl
-	jp	nc, BB0_17
+	jp	nc, BB0_15
+	ld	iy, 7995392
 	ld	hl, (ix - 9)
 	ld	de, (ix - 6)
 	ld	bc, (ix - 3)
@@ -207,25 +221,20 @@ BB0_13:
 	push	hl
 	pop	bc
 	ld	a, e
-	ld	hl, 7995392
+	lea	hl, iy
 	ld	e, 68
 	call	__fdiv
 	ld	l, a
 	push	hl
 	push	bc
 	ld	hl, _.str.5
-BB0_15:
-	push	hl
-	push	iy
-BB0_16:
-	call	_sprintf
 	jp	BB0_8
-BB0_17:
+BB0_15:
 	ld	de, 1
 	or	a, a
 	sbc	hl, hl
 	push	hl
-	push	hl
+	push	iy
 	push	de
 	ld	hl, (ix - 9)
 	ld	de, (ix - 6)
@@ -234,25 +243,28 @@ BB0_17:
 	pop	hl
 	pop	hl
 	pop	hl
-	jr	nz, BB0_19
+	ld	bc, _text
+	jr	nz, BB0_17
 	ld	hl, _.str.7
 	ld	de, 0
 	push	de
-	push	de
+	push	iy
 	inc	de
-	jr	BB0_20
-BB0_19:
+	jr	BB0_18
+BB0_17:
 	ld	hl, _.str.6
 	ld	de, (ix - 3)
 	push	de
 	ld	de, (ix - 6)
 	push	de
 	ld	de, (ix - 9)
-BB0_20:
+BB0_18:
 	push	de
 	push	hl
-	push	iy
-	jp	BB0_7
+	push	bc
+	call	_sprintf
+	pop	hl
+	jp	BB0_10
 	section	.text,"ax",@progbits
 
 	section	.text,"ax",@progbits
@@ -351,6 +363,8 @@ BB1_7:
 	pop	de
 	ld	c, 1
 	call	__ishru
+	ld	bc, 255
+	call	__iand
 	push	hl
 	pop	de
 	ld	hl, 160
@@ -376,7 +390,7 @@ BB1_7:
 	section	.text,"ax",@progbits
 	public	_handle_keypresses
 _handle_keypresses:
-	ld	hl, -6
+	ld	hl, -18
 	call	__frameset
 	call	_kb_Scan
 	ld	iy, -720878
@@ -386,38 +400,78 @@ _handle_keypresses:
 	ld	a, (_click)
 	ld	l, a
 	bit	5, e
-	jp	z, BB2_3
+	jp	z, BB2_9
 	ld	a, l
 	or	a, a
-	jp	nz, BB2_3
-	ld	hl, _cpc
-	ld	de, (hl)
-	or	a, a
-	sbc	hl, hl
-	ld	l, e
-	ld	h, d
-	ld	de, (_cookies)
-	ld	(ix - 6), de
+	jp	nz, BB2_9
 	ld	iy, _cookies
-	lea	iy, iy + 3
-	ld	de, (iy)
-	ld	iy, _cookies
+	ld	bc, _cpc
+	ld	hl, (_cookies)
+	ld	(ix - 3), hl
+	lea	hl, iy + 3
+	ld	hl, (hl)
+	ld	(ix - 6), hl
+	lea	hl, iy + 6
+	ld	(ix - 9), hl
+	ld	hl, (hl)
+	ld	de, (_cpc)
+	ld	(ix - 12), de
+	ld	de, (_cpc+3)
+	push	bc
+	pop	iy
 	lea	iy, iy + 6
-	ld	(ix - 3), iy
 	ld	bc, (iy)
-	ld	iy, 0
-	push	iy
-	push	iy
 	push	hl
 	ld	hl, (ix - 6)
+	push	hl
+	ld	hl, (ix - 3)
+	push	hl
+	ld	hl, (ix - 12)
 	call	__lladd
+	ld	(ix - 3), hl
+	ld	(ix - 6), de
 	pop	iy
 	pop	iy
 	pop	iy
+	ld	de, (_quintillion)
+	ld	hl, (_quintillion+3)
+	ld	iy, _quintillion
+	lea	iy, iy + 6
+	ld	iy, (iy)
+	ld	(ix - 12), iy
+	push	iy
+	ld	(ix - 15), hl
+	push	hl
+	ld	(ix - 18), de
+	push	de
+	ld	hl, (ix - 3)
+	ld	de, (ix - 6)
+	call	__llcmpu
+	pop	iy
+	pop	iy
+	pop	iy
+	ccf
+	sbc	a, a
+	inc	a
+	bit	0, a
+	jr	nz, BB2_4
+	ld	hl, (ix - 18)
+	ld	(ix - 3), hl
+BB2_4:
+	bit	0, a
+	ld	de, (ix - 6)
+	jr	nz, BB2_6
+	ld	de, (ix - 15)
+BB2_6:
+	bit	0, a
 	ld	iy, -720878
+	jp	nz, BB2_8
+	ld	bc, (ix - 12)
+BB2_8:
+	ld	hl, (ix - 3)
 	ld	(_cookies), hl
 	ld	(_cookies+3), de
-	ld	hl, (ix - 3)
+	ld	hl, (ix - 9)
 	ld	(hl), c
 	inc	hl
 	ld	(hl), b
@@ -425,21 +479,21 @@ _handle_keypresses:
 	ld	(_click), a
 	ld	(_draw), a
 	ld	l, a
-BB2_3:
+BB2_9:
 	ld	e, (iy)
 	ld	d, (iy + 1)
 	ld	a, e
 	bit	5, a
-	jr	nz, BB2_7
+	jr	nz, BB2_13
 	ld	a, l
 	or	a, a
-	jr	z, BB2_6
+	jr	z, BB2_12
 	ld	a, 1
 	ld	(_draw), a
-BB2_6:
+BB2_12:
 	xor	a, a
 	ld	(_click), a
-BB2_7:
+BB2_13:
 	ld	sp, ix
 	pop	ix
 	ret
@@ -523,6 +577,21 @@ BB3_3:
 	ret
 	section	.text,"ax",@progbits
 
+	section	.data,"aw",@progbits
+	public	_quintillion
+_quintillion:
+	dq	1000000000000000000
+
+	section	.data,"aw",@progbits
+	public	_quadrillion
+_quadrillion:
+	dq	1000000000000000
+
+	section	.data,"aw",@progbits
+	public	_trillion
+_trillion:
+	dq	1000000000000
+
 	section	.bss,"aw",@nobits
 	public	_click
 _click:
@@ -546,12 +615,12 @@ _scale:
 	section	.bss,"aw",@nobits
 	public	_cps
 _cps:
-	rb	2
+	rb	8
 
-	section	.data,"aw",@progbits
+	section	.bss,"aw",@nobits
 	public	_cpc
 _cpc:
-	dw	100
+	rb	8
 
 	section	.bss,"aw",@nobits
 	public	_text
@@ -561,32 +630,32 @@ _text:
 	section	.rodata,"a",@progbits
 	private	_.str
 _.str:
-	db	"%Lf quintillion cookies", 0
+	db	"%.2f quintillion cookies", 0
 
 	section	.rodata,"a",@progbits
 	private	_.str.1
 _.str.1:
-	db	"%Lf quadrillion cookies", 0
+	db	"%.2f quadrillion cookies", 0
 
 	section	.rodata,"a",@progbits
 	private	_.str.2
 _.str.2:
-	db	"%Lf trillion cookies", 0
+	db	"%.2f trillion cookies", 0
 
 	section	.rodata,"a",@progbits
 	private	_.str.3
 _.str.3:
-	db	"%lf billion cookies", 0
+	db	"%.2f billion cookies", 0
 
 	section	.rodata,"a",@progbits
 	private	_.str.4
 _.str.4:
-	db	"%lf million cookies", 0
+	db	"%.2f million cookies", 0
 
 	section	.rodata,"a",@progbits
 	private	_.str.5
 _.str.5:
-	db	"%lf thousand cookies", 0
+	db	"%.2f thousand cookies", 0
 
 	section	.rodata,"a",@progbits
 	private	_.str.6
@@ -613,9 +682,9 @@ _cookie_compressed:
 _global_palette:
 	db	"ÿÿ", 0, 0, "àÿt%1b"
 
-	ident	"clang version 15.0.0 (https://github.com/jacobly0/llvm-project 5f8512f22751066573aa48ac848a6d2195838ac3)"
-	ident	"clang version 15.0.0 (https://github.com/jacobly0/llvm-project 5f8512f22751066573aa48ac848a6d2195838ac3)"
-	ident	"clang version 15.0.0 (https://github.com/jacobly0/llvm-project 5f8512f22751066573aa48ac848a6d2195838ac3)"
+	ident	"clang version 15.0.0 (https://github.com/CE-Programming/llvm-project 23b78267b5d376b232475d0805a937e54b61e0d0)"
+	ident	"clang version 15.0.0 (https://github.com/CE-Programming/llvm-project 23b78267b5d376b232475d0805a937e54b61e0d0)"
+	ident	"clang version 15.0.0 (https://github.com/CE-Programming/llvm-project 23b78267b5d376b232475d0805a937e54b61e0d0)"
 	extern	_gfx_SetTextTransparentColor
 	extern	__Unwind_SjLj_Register
 	extern	__frameset
@@ -626,9 +695,8 @@ _global_palette:
 	extern	_gfx_SetTransparentColor
 	extern	_sprintf
 	extern	_kb_Scan
-	extern	__ulltod
-	extern	__ulltof
 	extern	_gfx_Begin
+	extern	__ulltof
 	extern	_gfx_GetStringWidth
 	extern	_gfx_SetPalette
 	extern	__ishru
@@ -636,8 +704,8 @@ _global_palette:
 	extern	_gfx_SetDraw
 	extern	__llcmpu
 	extern	__Unwind_SjLj_Unregister
-	extern	_gfx_FillRectangle
 	extern	__iand
+	extern	_gfx_FillRectangle
 	extern	__lladd
 	extern	_gfx_AllocSprite
 	extern	__fdiv
@@ -647,4 +715,3 @@ _global_palette:
 	extern	_gfx_PrintStringXY
 	extern	_gfx_End
 	extern	_free
-	extern	__ddiv
