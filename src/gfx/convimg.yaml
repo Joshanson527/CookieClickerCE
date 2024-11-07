@@ -1,0 +1,26 @@
+palettes:
+  - name: global_palette
+    max-entries: 48
+    fixed-entries:
+      - color: {index: 0, r: 255, g: 255, b: 255} # White
+      - color: {index: 1, r: 0, g: 0, b: 0} # Black
+      - color: {index: 2, r: 255, g: 255, b: 0} # Yellow (transparent color)
+      - color: {index: 3, r: 77, g: 91, b: 161} # Darker blue
+      - color: {index: 4, r: 55, g: 65, b: 117} # Lighter blue
+    images: automatic
+
+converts:
+  - name: cookie
+    palette: global_palette
+    compress: zx0
+    images:
+      - cookie.png
+
+outputs:
+  - type: c
+    include-file: gfx.h
+    palettes:
+      - global_palette
+    converts:
+      - cookie
+

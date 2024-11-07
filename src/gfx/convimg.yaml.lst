@@ -1,0 +1,5 @@
+global_palette.h
+global_palette.c
+cookie.h
+cookie.c
+gfx.h
