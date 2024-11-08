@@ -1,11 +1,12 @@
 obj/src/main.c.bc: src\main.c \
-  C:\Users\Josha\OneDrive\Documents\CEdev-Windows\CEdev\include\graphx.h \
-  C:\Users\Josha\OneDrive\Documents\CEdev-Windows\CEdev\include\stdint.h \
-  C:\Users\Josha\OneDrive\Documents\CEdev-Windows\CEdev\include\cdefs.h \
-  C:\Users\Josha\OneDrive\Documents\CEdev-Windows\CEdev\include\stdlib.h \
-  C:\Users\Josha\OneDrive\Documents\CEdev-Windows\CEdev\include\stdbool.h \
-  C:\Users\Josha\OneDrive\Documents\CEdev-Windows\CEdev\include\compression.h \
-  C:\Users\Josha\OneDrive\Documents\CEdev-Windows\CEdev\include\keypadc.h \
-  C:\Users\Josha\OneDrive\Documents\CEdev-Windows\CEdev\include\stdio.h \
-  C:\Users\Josha\OneDrive\Documents\CEdev-Windows\CEdev\include\stdarg.h \
-  src\gfx\gfx.h src\gfx\global_palette.h src\gfx\cookie.h
+  c:\Users\S378217\Calculator\CEdev\include\graphx.h \
+  c:\Users\S378217\Calculator\CEdev\include\stdint.h \
+  c:\Users\S378217\Calculator\CEdev\include\cdefs.h \
+  c:\Users\S378217\Calculator\CEdev\include\stdlib.h \
+  c:\Users\S378217\Calculator\CEdev\include\stdbool.h \
+  c:\Users\S378217\Calculator\CEdev\include\compression.h \
+  c:\Users\S378217\Calculator\CEdev\include\keypadc.h \
+  c:\Users\S378217\Calculator\CEdev\include\stdio.h \
+  c:\Users\S378217\Calculator\CEdev\include\stdarg.h \
+  c:\Users\S378217\Calculator\CEdev\include\time.h src\gfx\gfx.h \
+  src\gfx\global_palette.h src\gfx\cookie.h

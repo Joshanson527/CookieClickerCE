@@ -91,6 +91,22 @@ BB0_3:
 	section	.text,"ax",@progbits
 
 	section	.text,"ax",@progbits
+	public	_updateCps
+_updateCps:
+	ld	bc, 0
+	ld.sis	de, 0
+	ld	iy, _cps
+	ld	(_cps), bc
+	ld	(_cps+3), bc
+	lea	hl, iy + 6
+	ld	(hl), e
+	inc	hl
+	ld	(hl), d
+	ld	(_i), bc
+	ret
+	section	.text,"ax",@progbits
+
+	section	.text,"ax",@progbits
 	public	_textBeautifier
 _textBeautifier:
 	ld	hl, -9
@@ -112,7 +128,7 @@ _textBeautifier:
 	pop	hl
 	pop	hl
 	pop	hl
-	jp	nc, BB1_5
+	jp	nc, BB2_5
 	ld	iy, _quadrillion
 	ld	de, (_quadrillion)
 	ld	bc, (_quadrillion+3)
@@ -130,7 +146,7 @@ _textBeautifier:
 	pop	hl
 	pop	hl
 	pop	hl
-	jp	nc, BB1_6
+	jp	nc, BB2_6
 	ld	iy, _trillion
 	ld	de, (_trillion)
 	ld	bc, (_trillion+3)
@@ -148,7 +164,7 @@ _textBeautifier:
 	pop	hl
 	pop	hl
 	pop	hl
-	jp	nc, BB1_7
+	jp	nc, BB2_7
 	ld	hl, -6632961
 	ld	de, 59
 	ld.sis	bc, 0
@@ -162,7 +178,7 @@ _textBeautifier:
 	pop	hl
 	pop	hl
 	pop	hl
-	jp	nc, BB1_10
+	jp	nc, BB2_10
 	ld	iy, 7236392
 	ld	hl, (ix + 6)
 	ld	de, (ix + 9)
@@ -175,11 +191,13 @@ _textBeautifier:
 	ld	e, 78
 	call	__fdiv
 	ld	l, a
+	ld	de, (ix + 15)
+	push	de
 	push	hl
 	push	bc
 	ld	hl, _.str.3
-	jp	BB1_8
-BB1_5:
+	jp	BB2_8
+BB2_5:
 	ld	hl, (ix + 6)
 	ld	de, (ix + 9)
 	ld	bc, (ix + 12)
@@ -194,11 +212,13 @@ BB1_5:
 	ld	bc, (ix - 9)
 	call	__fdiv
 	ld	l, a
+	ld	de, (ix + 15)
+	push	de
 	push	hl
 	push	bc
 	ld	hl, _.str
-	jp	BB1_8
-BB1_6:
+	jp	BB2_8
+BB2_6:
 	ld	hl, (ix + 6)
 	ld	de, (ix + 9)
 	ld	bc, (ix + 12)
@@ -213,11 +233,13 @@ BB1_6:
 	ld	bc, (ix - 9)
 	call	__fdiv
 	ld	l, a
+	ld	de, (ix + 15)
+	push	de
 	push	hl
 	push	bc
 	ld	hl, _.str.1
-	jp	BB1_8
-BB1_7:
+	jp	BB2_8
+BB2_7:
 	ld	hl, (ix + 6)
 	ld	de, (ix + 9)
 	ld	bc, (ix + 12)
@@ -232,15 +254,18 @@ BB1_7:
 	ld	bc, (ix - 9)
 	call	__fdiv
 	ld	l, a
+	ld	de, (ix + 15)
+	push	de
 	push	hl
 	push	bc
 	ld	hl, _.str.2
-BB1_8:
+BB2_8:
 	push	hl
 	ld	hl, _text
 	push	hl
 	call	_sprintf
-BB1_9:
+BB2_9:
+	pop	hl
 	pop	hl
 	pop	hl
 	pop	hl
@@ -248,7 +273,7 @@ BB1_9:
 	ld	sp, ix
 	pop	ix
 	ret
-BB1_10:
+BB2_10:
 	ld	hl, 999999
 	ld	de, (ix + 12)
 	push	de
@@ -262,7 +287,7 @@ BB1_10:
 	pop	hl
 	pop	hl
 	pop	hl
-	jp	nc, BB1_12
+	jp	nc, BB2_12
 	ld	iy, 7611392
 	ld	hl, (ix + 6)
 	ld	de, (ix + 9)
@@ -275,11 +300,13 @@ BB1_10:
 	ld	e, 73
 	call	__fdiv
 	ld	l, a
+	ld	de, (ix + 15)
+	push	de
 	push	hl
 	push	bc
 	ld	hl, _.str.4
-	jp	BB1_8
-BB1_12:
+	jp	BB2_8
+BB2_12:
 	ld	hl, 999
 	ld	de, (ix + 12)
 	push	de
@@ -292,7 +319,7 @@ BB1_12:
 	pop	hl
 	pop	hl
 	pop	hl
-	jp	nc, BB1_14
+	jp	nc, BB2_14
 	ld	iy, 7995392
 	ld	hl, (ix + 6)
 	ld	de, (ix + 9)
@@ -305,11 +332,13 @@ BB1_12:
 	ld	e, 68
 	call	__fdiv
 	ld	l, a
+	ld	de, (ix + 15)
+	push	de
 	push	hl
 	push	bc
 	ld	hl, _.str.5
-	jp	BB1_8
-BB1_14:
+	jp	BB2_8
+BB2_14:
 	ld	de, 1
 	or	a, a
 	sbc	hl, hl
@@ -324,98 +353,95 @@ BB1_14:
 	pop	hl
 	pop	hl
 	ld	bc, _text
-	jr	nz, BB1_16
+	ld	de, (ix + 15)
+	jr	nz, BB2_16
 	ld	hl, _.str.7
+	push	de
 	ld	de, 0
 	push	de
 	push	iy
 	inc	de
-	jr	BB1_17
-BB1_16:
+	jr	BB2_17
+BB2_16:
 	ld	hl, _.str.6
+	push	de
 	ld	de, (ix + 12)
 	push	de
 	ld	de, (ix + 9)
 	push	de
 	ld	de, (ix + 6)
-BB1_17:
+BB2_17:
 	push	de
 	push	hl
 	push	bc
 	call	_sprintf
 	pop	hl
-	jp	BB1_9
+	jp	BB2_9
 	section	.text,"ax",@progbits
 
 	section	.text,"ax",@progbits
 	public	_redraw
 _redraw:
-	ld	hl, -9
+	ld	hl, -3
 	call	__frameset
-	ld	de, 1
 	ld	l, 3
-	ld	(ix - 9), hl
-	push	de
+	ld	(ix - 3), hl
+	ld	hl, 1
+	push	hl
 	call	_gfx_SetDraw
 	pop	hl
-	ld	de, 16
-	ld	bc, 0
-	push	bc
-	pop	iy
-BB2_1:
-	push	bc
+	ld	bc, 16
+	ld	de, 0
+BB3_1:
+	ld	(_i), de
+	push	de
 	pop	hl
 	or	a, a
-	sbc	hl, de
-	jp	z, BB2_5
-	ld	(ix - 3), iy
-	push	bc
-	pop	hl
-	ld	(ix - 6), bc
+	sbc	hl, bc
+	call	pe, __setflag
+	jp	p, BB3_5
+	ex	de, hl
 	ld	bc, 1
 	call	__iand
 	bit	0, l
 	ld	a, 4
 	ld	l, a
-	jp	z, BB2_4
+	jp	z, BB3_4
 	ld	l, 3
-BB2_4:
+BB3_4:
 	push	hl
 	call	_gfx_SetColor
 	pop	hl
-	ld	hl, 240
-	push	hl
-	ld	hl, 20
-	push	hl
-	or	a, a
-	sbc	hl, hl
-	push	hl
-	ld	hl, (ix - 3)
+	ld	hl, (_i)
+	ld	bc, 20
+	call	__imulu
+	ld	de, 240
+	push	de
+	push	bc
+	ld	de, 0
+	push	de
 	push	hl
 	call	_gfx_FillRectangle
-	ld	iy, (ix - 3)
 	pop	hl
 	pop	hl
 	pop	hl
 	pop	hl
-	ld	bc, (ix - 6)
-	inc	bc
-	ld	de, 20
-	add	iy, de
-	ld	de, 16
-	jp	BB2_1
-BB2_5:
+	ld	de, (_i)
+	inc	de
+	ld	bc, 16
+	jp	BB3_1
+BB3_5:
 	ld	a, (_page)
-	cp	a, 1
-	jp	nz, BB2_9
+	or	a, a
+	jp	nz, BB3_9
 	ld	a, (_click)
 	bit	0, a
-	jr	z, BB2_8
+	jr	z, BB3_8
 	ld	a, 2
 	ld	l, a
-	ld	(ix - 9), hl
-BB2_8:
-	ld	de, (ix - 9)
+	ld	(ix - 3), hl
+BB3_8:
+	ld	de, (ix - 3)
 	ld	a, e
 	ld	(_scale), a
 	ld	iy, (_cookie)
@@ -440,15 +466,62 @@ BB2_8:
 	pop	hl
 	pop	hl
 	pop	hl
-	ld	bc, (_cookies)
+	ld	hl, (_cookies)
+	ld	(ix - 3), hl
 	ld	de, (_cookies+3)
 	ld	iy, _cookies
 	lea	hl, iy + 6
 	ld	hl, (hl)
+	ld	bc, _.str.8
+	push	bc
 	push	hl
 	push	de
-	push	bc
+	ld	hl, (ix - 3)
+	push	hl
 	call	_textBeautifier
+	pop	hl
+	pop	hl
+	pop	hl
+	pop	hl
+	ld	hl, _text
+	push	hl
+	call	_gfx_GetStringWidth
+	pop	de
+	ld	a, 1
+	ld	c, a
+	call	__ishru
+	ld	de, 255
+	push	de
+	pop	bc
+	call	__iand
+	push	hl
+	pop	de
+	ld	hl, 160
+	or	a, a
+	sbc	hl, de
+	ld	de, 10
+	push	de
+	push	hl
+	ld	hl, _text
+	push	hl
+	call	_gfx_PrintStringXY
+	pop	hl
+	pop	hl
+	pop	hl
+	ld	hl, (_cps)
+	ld	(ix - 3), hl
+	ld	de, (_cps+3)
+	ld	iy, _cps
+	lea	hl, iy + 6
+	ld	hl, (hl)
+	ld	bc, _.str.9
+	push	bc
+	push	hl
+	push	de
+	ld	hl, (ix - 3)
+	push	hl
+	call	_textBeautifier
+	pop	hl
 	pop	hl
 	pop	hl
 	pop	hl
@@ -465,7 +538,7 @@ BB2_8:
 	ld	hl, 160
 	or	a, a
 	sbc	hl, de
-	ld	de, 10
+	ld	de, 20
 	push	de
 	push	hl
 	ld	hl, _text
@@ -474,11 +547,50 @@ BB2_8:
 	pop	hl
 	pop	hl
 	pop	hl
-BB2_9:
+	ld	hl, (_cpc)
+	ld	(ix - 3), hl
+	ld	de, (_cpc+3)
+	ld	iy, _cpc
+	lea	hl, iy + 6
+	ld	hl, (hl)
+	ld	bc, _.str.10
+	push	bc
+	push	hl
+	push	de
+	ld	hl, (ix - 3)
+	push	hl
+	call	_textBeautifier
+	pop	hl
+	pop	hl
+	pop	hl
+	pop	hl
+	ld	hl, _text
+	push	hl
+	call	_gfx_GetStringWidth
+	pop	de
+	ld	c, 1
+	call	__ishru
+	ld	bc, 255
+	call	__iand
+	push	hl
+	pop	de
+	ld	hl, 160
+	or	a, a
+	sbc	hl, de
+	ld	de, 30
+	push	de
+	push	hl
+	ld	hl, _text
+	push	hl
+	call	_gfx_PrintStringXY
+	pop	hl
+	pop	hl
+	pop	hl
+BB3_9:
 	call	_gfx_SwapDraw
 	xor	a, a
 	ld	(_draw), a
-	ld	sp, ix
+	pop	hl
 	pop	ix
 	ret
 	section	.text,"ax",@progbits
@@ -489,17 +601,23 @@ _handle_keypresses:
 	ld	hl, -18
 	call	__frameset
 	call	_kb_Scan
-	ld	iy, -720878
-	ld	l, (iy)
-	ld	h, (iy + 1)
+	ld	hl, -720878
+	push	de
+	ld	e, (hl)
+	inc	hl
+	ld	d, (hl)
+	ld	l, e
+	ld	h, d
+	pop	de
 	ld	e, l
 	ld	a, (_click)
 	ld	l, a
 	bit	5, e
-	jp	z, BB3_9
+	jp	z, BB4_9
 	ld	a, l
 	or	a, a
-	jp	nz, BB3_9
+	ld	c, 1
+	jp	nz, BB4_10
 	ld	iy, _cookies
 	ld	bc, _cpc
 	ld	hl, (_cookies)
@@ -550,20 +668,21 @@ _handle_keypresses:
 	sbc	a, a
 	inc	a
 	bit	0, a
-	jr	nz, BB3_4
+	jr	nz, BB4_4
 	ld	hl, (ix - 18)
 	ld	(ix - 3), hl
-BB3_4:
+BB4_4:
 	bit	0, a
 	ld	de, (ix - 6)
-	jr	nz, BB3_6
+	jr	nz, BB4_6
 	ld	de, (ix - 15)
-BB3_6:
+BB4_6:
 	bit	0, a
-	ld	iy, -720878
-	jp	nz, BB3_8
+	ld	iyl, 1
+	ld	a, iyl
+	jp	nz, BB4_8
 	ld	bc, (ix - 12)
-BB3_8:
+BB4_8:
 	ld	hl, (ix - 3)
 	ld	(_cookies), hl
 	ld	(_cookies+3), de
@@ -571,25 +690,72 @@ BB3_8:
 	ld	(hl), c
 	inc	hl
 	ld	(hl), b
-	ld	a, 1
 	ld	(_click), a
 	ld	(_draw), a
 	ld	l, a
-BB3_9:
+	ld	c, a
+	jr	BB4_10
+BB4_9:
+	ld	c, 1
+BB4_10:
+	ld	iy, -720878
 	ld	e, (iy)
 	ld	d, (iy + 1)
 	ld	a, e
 	bit	5, a
-	jr	nz, BB3_13
+	ld	e, iyh
+	jr	nz, BB4_14
 	ld	a, l
 	or	a, a
-	jr	z, BB3_12
-	ld	a, 1
+	jr	z, BB4_13
+	ld	a, c
 	ld	(_draw), a
-BB3_12:
-	xor	a, a
+BB4_13:
+	ld	a, e
 	ld	(_click), a
-BB3_13:
+BB4_14:
+	ld	l, (iy)
+	ld	h, (iy + 1)
+	ld	a, l
+	bit	4, a
+	jr	nz, BB4_22
+	ld	l, (iy)
+	ld	h, (iy + 1)
+	ld	a, l
+	bit	3, a
+	ld	e, c
+	jr	nz, BB4_22
+	ld	l, (iy)
+	ld	h, (iy + 1)
+	ld	a, l
+	bit	2, a
+	jr	nz, BB4_20
+	ld	l, (iy)
+	ld	h, (iy + 1)
+	ld	a, l
+	bit	1, a
+	jr	nz, BB4_21
+	ld	a, c
+	ld.sis	bc, 1
+	ld	l, (iy)
+	ld	h, (iy + 1)
+	call	__sand
+	bit	0, l
+	jr	z, BB4_23
+	ld	e, 4
+	ld	c, a
+	jr	BB4_22
+BB4_20:
+	ld	e, 2
+	jr	BB4_22
+BB4_21:
+	ld	e, 3
+BB4_22:
+	ld	a, e
+	ld	(_page), a
+	ld	a, c
+	ld	(_draw), a
+BB4_23:
 	ld	sp, ix
 	pop	ix
 	ret
@@ -598,6 +764,8 @@ BB3_13:
 	section	.text,"ax",@progbits
 	public	_main
 _main:
+	ld	hl, -22
+	call	__frameset
 	ld	hl, _malloc
 	push	hl
 	ld	hl, 32
@@ -645,24 +813,85 @@ _main:
 	pop	hl
 	call	_redraw
 	call	_kb_Scan
-BB4_1:
-	ld	hl, -720868
-	push	de
-	ld	e, (hl)
-	inc	hl
-	ld	d, (hl)
-	ld	l, e
-	ld	h, d
-	pop	de
+	call	_clock
+	ld	iy, -720868
+	lea	bc, iy
+	ld	(ix - 3), hl
+	ld	(ix - 4), e
+	ld	iy, _cps
+	lea	hl, iy + 6
+	ld	(ix - 7), hl
+	push	bc
+	pop	iy
+BB5_1:
+	ld	l, (iy)
+	ld	h, (iy + 1)
 	ld	a, l
 	bit	6, a
-	jr	nz, BB4_3
+	jp	nz, BB5_5
 	ld	a, (_draw)
 	bit	0, a
 	call	nz, _redraw
+	call	_clock
+	ld	bc, (ix - 3)
+	ld	a, (ix - 4)
+	call	__lsub
+	push	hl
+	pop	bc
+	ld	a, e
+	call	__ultof
+	or	a, a
+	sbc	hl, hl
+	ld	e, 56
+	call	__fmul
+	ld	hl, -8388608
+	ld	e, 63
+	call	__fcmp
+	jp	p, BB5_4
+	call	_clock
+	ld	(ix - 3), hl
+	ld	(ix - 4), e
+	ld	hl, (_cps)
+	ld	(ix - 13), hl
+	ld	hl, (_cps+3)
+	ld	(ix - 19), hl
+	ld	hl, (ix - 7)
+	ld	de, (hl)
+	ld	hl, (_cookies)
+	ld	(ix - 16), hl
+	ld	hl, _cookies
+	push	hl
+	pop	iy
+	lea	hl, iy + 3
+	ld	hl, (hl)
+	ld	(ix - 22), hl
+	lea	hl, iy + 6
+	ld	(ix - 10), hl
+	ld	bc, (hl)
+	push	de
+	ld	hl, (ix - 19)
+	push	hl
+	ld	hl, (ix - 13)
+	push	hl
+	ld	hl, (ix - 16)
+	ld	de, (ix - 22)
+	call	__lladd
+	pop	iy
+	pop	iy
+	pop	iy
+	ld	(_cookies), hl
+	ld	(_cookies+3), de
+	ld	hl, (ix - 10)
+	ld	(hl), c
+	inc	hl
+	ld	(hl), b
+	ld	a, 1
+	ld	(_draw), a
+BB5_4:
 	call	_handle_keypresses
-	jr	BB4_1
-BB4_3:
+	ld	iy, -720868
+	jp	BB5_1
+BB5_5:
 	ld	hl, (_cookie)
 	push	hl
 	call	_free
@@ -670,6 +899,8 @@ BB4_3:
 	call	_gfx_End
 	or	a, a
 	sbc	hl, hl
+	ld	sp, ix
+	pop	ix
 	ret
 	section	.text,"ax",@progbits
 
@@ -713,15 +944,15 @@ _cookies:
 _scale:
 	db	2
 
-	section	.bss,"aw",@nobits
+	section	.data,"aw",@progbits
 	public	_cps
 _cps:
-	rb	8
+	dq	10
 
-	section	.bss,"aw",@nobits
+	section	.data,"aw",@progbits
 	public	_cpc
 _cpc:
-	rb	8
+	dq	10
 
 	section	.data,"aw",@progbits
 	public	_buildingProductionRateMultiplier
@@ -769,6 +1000,11 @@ _buildingQuantities:
 	rb	10
 
 	section	.bss,"aw",@nobits
+	public	_i
+_i:
+	rb	3
+
+	section	.bss,"aw",@nobits
 	public	_text
 _text:
 	rb	64
@@ -776,47 +1012,62 @@ _text:
 	section	.rodata,"a",@progbits
 	private	_.str
 _.str:
-	db	"%.2f quintillion cookies", 0
+	db	"%.2f quintillion cookies%s", 0
 
 	section	.rodata,"a",@progbits
 	private	_.str.1
 _.str.1:
-	db	"%.2f quadrillion cookies", 0
+	db	"%.2f quadrillion cookies%s", 0
 
 	section	.rodata,"a",@progbits
 	private	_.str.2
 _.str.2:
-	db	"%.2f trillion cookies", 0
+	db	"%.2f trillion cookies%s", 0
 
 	section	.rodata,"a",@progbits
 	private	_.str.3
 _.str.3:
-	db	"%.2f billion cookies", 0
+	db	"%.2f billion cookies%s", 0
 
 	section	.rodata,"a",@progbits
 	private	_.str.4
 _.str.4:
-	db	"%.2f million cookies", 0
+	db	"%.2f million cookies%s", 0
 
 	section	.rodata,"a",@progbits
 	private	_.str.5
 _.str.5:
-	db	"%.2f thousand cookies", 0
+	db	"%.2f thousand cookies%s", 0
 
 	section	.rodata,"a",@progbits
 	private	_.str.6
 _.str.6:
-	db	"%llu cookies", 0
+	db	"%llu cookies%s", 0
 
 	section	.rodata,"a",@progbits
 	private	_.str.7
 _.str.7:
-	db	"%llu cookie", 0
+	db	"%llu cookie%s", 0
 
 	section	.bss,"aw",@nobits
 	public	_cookie
 _cookie:
 	rb	3
+
+	section	.rodata,"a",@progbits
+	private	_.str.8
+_.str.8:
+	db	1 dup 0
+
+	section	.rodata,"a",@progbits
+	private	_.str.9
+_.str.9:
+	db	" per second", 0
+
+	section	.rodata,"a",@progbits
+	private	_.str.10
+_.str.10:
+	db	" per click", 0
 
 	section	.data,"aw",@progbits
 	public	_cookie_compressed
@@ -833,22 +1084,28 @@ _global_palette:
 	ident	"clang version 15.0.0 (https://github.com/CE-Programming/llvm-project 23b78267b5d376b232475d0805a937e54b61e0d0)"
 	extern	_gfx_SetTextTransparentColor
 	extern	__Unwind_SjLj_Register
+	extern	__Unwind_SjLj_Unregister
 	extern	__frameset
 	extern	_zx0_Decompress
 	extern	_malloc
-	extern	_gfx_SetTextBGColor
 	extern	_gfx_SetTextFGColor
+	extern	_gfx_SetTextBGColor
 	extern	_gfx_SetTransparentColor
 	extern	_sprintf
 	extern	_gfx_Begin
 	extern	_kb_Scan
 	extern	__ulltof
+	extern	__lsub
 	extern	_gfx_GetStringWidth
 	extern	_gfx_SetPalette
 	extern	__ishl
 	extern	_gfx_SwapDraw
 	extern	__ishru
+	extern	__ultof
+	extern	__fmul
+	extern	__sand
 	extern	_gfx_SetDraw
+	extern	__setflag
 	extern	__llcmpu
 	extern	__iand
 	extern	_gfx_FillRectangle
@@ -856,7 +1113,6 @@ _global_palette:
 	extern	__lladd
 	extern	_gfx_AllocSprite
 	extern	__fdiv
-	extern	__Unwind_SjLj_Unregister
 	extern	__imulu
 	extern	_gfx_SetColor
 	extern	_gfx_ScaledTransparentSprite_NoClip
@@ -864,3 +1120,5 @@ _global_palette:
 	extern	_gfx_PrintStringXY
 	extern	_gfx_End
 	extern	_free
+	extern	__fcmp
+	extern	_clock
