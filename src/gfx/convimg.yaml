@@ -10,11 +10,15 @@ palettes:
     images: automatic
 
 converts:
-  - name: cookie
+  - name: sprites
     palette: global_palette
     compress: zx0
     images:
-      - cookie.png
+      - Cookie.png
+      - Cursor.png
+      - Grandma.png
+      - Farm.png
+      - Mines.png
 
 outputs:
   - type: c
@@ -22,5 +26,5 @@ outputs:
     palettes:
       - global_palette
     converts:
-      - cookie
+      - sprites
 

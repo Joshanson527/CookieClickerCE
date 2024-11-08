@@ -586,6 +586,28 @@ BB3_8:
 	pop	hl
 	pop	hl
 	pop	hl
+	ld	hl, _.str.11
+	push	hl
+	call	_gfx_GetStringWidth
+	pop	de
+	ld	c, 1
+	call	__ishru
+	ld	bc, 255
+	call	__iand
+	push	hl
+	pop	de
+	ld	hl, 160
+	or	a, a
+	sbc	hl, de
+	ld	de, 230
+	push	de
+	push	hl
+	ld	hl, _.str.11
+	push	hl
+	call	_gfx_PrintStringXY
+	pop	hl
+	pop	hl
+	pop	hl
 BB3_9:
 	call	_gfx_SwapDraw
 	xor	a, a
@@ -776,7 +798,7 @@ _main:
 	pop	de
 	pop	de
 	ld	(_cookie), hl
-	ld	de, _cookie_compressed
+	ld	de, _Cookie_compressed
 	push	de
 	push	hl
 	call	_zx0_Decompress
@@ -786,7 +808,7 @@ _main:
 	or	a, a
 	sbc	hl, hl
 	push	hl
-	ld	hl, 14
+	ld	hl, 66
 	push	hl
 	ld	hl, _global_palette
 	push	hl
@@ -903,6 +925,26 @@ BB5_5:
 	pop	ix
 	ret
 	section	.text,"ax",@progbits
+
+	section	.data,"aw",@progbits
+	public	_Cursor_compressed
+_Cursor_compressed:
+	db	"©¡j¿", 0, "ùàÜñÞÿÜàÜôÞýÝàõÞäž=:}õÃØÃÞ÷þøûtŽòÞ‘óâ‡”ÕÿU`"
+
+	section	.data,"aw",@progbits
+	public	_Farm_compressed
+_Farm_compressed:
+	db	"¨‘¯ôñÂO¢Z^ÿ™üýà¾Þžà", 10, "fY¹", 13, "Þh ˆ", 13, "øÙàÿßâÿ½þáþÞÿÖ>ÙàóþÿßãMày´ýRUV"
+
+	section	.data,"aw",@progbits
+	public	_Grandma_compressed
+_Grandma_compressed:
+	db	"¨( h", 10, " ËâóÿÞÛàýûùàýëþýáÞ¾ÿàOþ)*úâˆÿ", 10, "ùõâþéíâ¯", 10, "Þ?ë¾Ü¯ÿÄïýùþçàþà""SçßþøàþMUV"
+
+	section	.data,"aw",@progbits
+	public	_Mines_compressed
+_Mines_compressed:
+	db	"¨FŠáà¦	kÿÿùþÏÂþþ¸¼;Èÿ‚óœ;õƒþ¨à/þ¿ñéçH	çþ", 26, "úˆà“", 26, "þ¿rà", 26, 26, "ßý“àî¼€N>ø»€w¾üßÀÙ,", 13, "UV"
 
 	section	.data,"aw",@progbits
 	public	_quintillion
@@ -1069,16 +1111,25 @@ _.str.9:
 _.str.10:
 	db	" per click", 0
 
+	section	.rodata,"a",@progbits
+	private	_.str.11
+_.str.11:
+	db	"Cookie   Buildings   Upgrades   Achiev.  Settings", 0
+
 	section	.data,"aw",@progbits
-	public	_cookie_compressed
-_cookie_compressed:
-	db	"© ", 10, "", 26, "¡}ÄþôÄþÔÂüÿÂ¿þÁÂð¾áÔäÀ yØ}è|Àõj^Â]ÃüÝî•HäÀÒG××wvÅ–àÀOC×ìÝèÓ~×,ÓÂÚÀE¤_¾\€|À¾v|M@}*ñÀ q~}Â}¾|Ã!|", 13, "XÀWW@WUU€"
+	public	_Cookie_compressed
+_Cookie_compressed:
+	db	"¨ ZZ¡|Æçð•ˆþÁ¿þ}ÂOÿ×Â×Àõ¿Â÷¶Þ´Â_Û“Â×À¼ÞÀ=ääÀ)", 26, "Gu²õÀõþþÀþyÀJ^´WçÁÒpŠõÀ¥NÖóÇèèÀõ€ñÀÉìÙ~¤{Ðq", 0, "Ýü×x_ÀL×@ßÀ>9À", 26, "…w¼_fxÀ]Ó²÷É¾YtÍ“¾×8üÂ¾½Â_¾_ÿÓÄ×ºÚþàÄuUX"
 
 	section	.data,"aw",@progbits
 	public	_global_palette
 _global_palette:
-	db	"ÿÿ", 0, 0, "àÿt%1b"
+	db	"ÿÿ", 0, 0, "àÿt%œâ„b‰‚˜¢9!—§)N0A1r<f=a½¦ADHÅÂEÈM)VfZŠâ§b`f-ódô(wM÷üÿ"
 
+	ident	"clang version 15.0.0 (https://github.com/CE-Programming/llvm-project 23b78267b5d376b232475d0805a937e54b61e0d0)"
+	ident	"clang version 15.0.0 (https://github.com/CE-Programming/llvm-project 23b78267b5d376b232475d0805a937e54b61e0d0)"
+	ident	"clang version 15.0.0 (https://github.com/CE-Programming/llvm-project 23b78267b5d376b232475d0805a937e54b61e0d0)"
+	ident	"clang version 15.0.0 (https://github.com/CE-Programming/llvm-project 23b78267b5d376b232475d0805a937e54b61e0d0)"
 	ident	"clang version 15.0.0 (https://github.com/CE-Programming/llvm-project 23b78267b5d376b232475d0805a937e54b61e0d0)"
 	ident	"clang version 15.0.0 (https://github.com/CE-Programming/llvm-project 23b78267b5d376b232475d0805a937e54b61e0d0)"
 	ident	"clang version 15.0.0 (https://github.com/CE-Programming/llvm-project 23b78267b5d376b232475d0805a937e54b61e0d0)"

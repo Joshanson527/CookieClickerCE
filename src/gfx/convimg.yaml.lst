@@ -1,5 +1,13 @@
 global_palette.h
 global_palette.c
-cookie.h
-cookie.c
+Cookie.h
+Cookie.c
+Cursor.h
+Cursor.c
+Grandma.h
+Grandma.c
+Farm.h
+Farm.c
+Mines.h
+Mines.c
 gfx.h

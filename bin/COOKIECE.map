@@ -7,9 +7,9 @@ Section          Base   Top    High   Length
 .init.reruncheck D1AA6F D1AA6F             0h
 .init            D1AA6F D1AA99            2Ah
 .fini            D1AA99 D1AACD            34h
-.text            D1AACD D1D32F          2862h
-.data            D1D32F D1D3ED            BEh
-.rodata          D1D3ED D1D5B0           1C3h
+.text            D1AACD D1D362          2895h
+.data            D1D362 D1D47A           118h
+.rodata          D1D47A D1D66F           1F5h
 .init_array      000000 000000             0h
 .ctors           000000 000000             0h
 .dtors           000000 000000             0h
@@ -84,14 +84,14 @@ __standard_malloc                    = D1B022
 __standard_free                      = D1B0F5
 __standard_realloc                   = D1B1A3
 __alloc_base                         = D052C6
-_heap_ptr                            = D1D32F
+_heap_ptr                            = D1D362
 _npf_vpprintf                        = D1B219
-JTI0_0                               = D1D3ED
-JTI0_1                               = D1D40B
-JTI0_2                               = D1D450
-JTI0_3                               = D1D471
-JTI0_4                               = D1D489
-JTI0_5                               = D1D4A1
+JTI0_0                               = D1D47A
+JTI0_1                               = D1D498
+JTI0_2                               = D1D4DD
+JTI0_3                               = D1D4FE
+JTI0_4                               = D1D516
+JTI0_5                               = D1D52E
 _npf_utoa_rev                        = D1C983
 __printf_c                           = D1CA4B
 __vsnprintf_c                        = D1CA6A
@@ -102,9 +102,9 @@ __vsprintf_c                         = D1CB44
 __vprintf_c                          = D1CB63
 _npf_putc_std                        = D1CB83
 __sprintf_c                          = D1CB93
-_.str                                = D1D4B9
-_.str.1                              = D1D4BD
-_.str.2                              = D1D4C1
+_.str                                = D1D546
+_.str.1                              = D1D54A
+_.str.2                              = D1D54E
 _clock                               = D1CBBC
 _ldexpf                              = 0220DC
 _memset                              = D1CBC7
@@ -113,10 +113,10 @@ _outchar                             = D1CBDE
 _sprintf                             = D1CB93
 _vprintf                             = D1CB63
 _vsnprintf                           = D1CA6A
-.missingappvar                       = D1D4C5
-.libloadname                         = D1D4CA
+.missingappvar                       = D1D552
+.libloadname                         = D1D557
 .libloadnamelen                      = 000007
-.webaddress                          = D1D4D2
+.webaddress                          = D1D55F
 ___init_clock                        = D1AA54
 __start                              = D1AA6F
 ___exithl                            = D1AA99
@@ -127,34 +127,35 @@ _exit.sp                             = D1AA9A
 _exit.flash_wait_states              = D1AAA4
 _textBeautifier                      = D1CBF4
 _redraw                              = D1CE7E
-_handle_keypresses                   = D1D061
-_main                                = D1D1CE
-_quintillion                         = D1D332
-_quadrillion                         = D1D33A
-_trillion                            = D1D342
+_handle_keypresses                   = D1D094
+_main                                = D1D201
+_quintillion                         = D1D365
+_quadrillion                         = D1D36D
+_trillion                            = D1D375
 _click                               = D052CC
-_draw                                = D1D34A
+_draw                                = D1D37D
 _page                                = D052CD
 _cookies                             = D052CE
-_scale                               = D1D34B
-_cps                                 = D1D34C
-_cpc                                 = D1D354
+_scale                               = D1D37E
+_cps                                 = D1D37F
+_cpc                                 = D1D387
 _i                                   = D052D6
 _text                                = D052D9
-_.str                                = D1D4E7
-_.str.1                              = D1D502
-_.str.2                              = D1D51D
-_.str.3                              = D1D535
-_.str.4                              = D1D54C
-_.str.5                              = D1D563
-_.str.6                              = D1D57B
-_.str.7                              = D1D58A
+_.str                                = D1D574
+_.str.1                              = D1D58F
+_.str.2                              = D1D5AA
+_.str.3                              = D1D5C2
+_.str.4                              = D1D5D9
+_.str.5                              = D1D5F0
+_.str.6                              = D1D608
+_.str.7                              = D1D617
 _cookie                              = D05319
-_.str.8                              = D1D598
-_.str.9                              = D1D599
-_.str.10                             = D1D5A5
-_cookie_compressed                   = D1D35C
-_global_palette                      = D1D3DF
+_.str.8                              = D1D625
+_.str.9                              = D1D626
+_.str.10                             = D1D632
+_.str.11                             = D1D63D
+_Cookie_compressed                   = D1D38F
+_global_palette                      = D1D438
 lib.LibLoad                          = D1A9F7
 _#gfx_Begin                          = D1AA0A
 _#gfx_End                            = D1AA0E

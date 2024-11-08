@@ -1,15 +1,15 @@
-#ifndef cookie_include_file
-#define cookie_include_file
+#ifndef Cookie_include_file
+#define Cookie_include_file
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
-#define cookie_width 32
-#define cookie_height 32
-#define cookie_size 1026
-#define cookie_compressed_size 131
-extern unsigned char cookie_compressed[131];
+#define Cookie_width 32
+#define Cookie_height 32
+#define Cookie_size 1026
+#define Cookie_compressed_size 169
+extern unsigned char Cookie_compressed[169];
 
 #ifdef __cplusplus
 }

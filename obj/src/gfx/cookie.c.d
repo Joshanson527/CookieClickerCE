@@ -1,1 +1,1 @@
-obj/src/gfx/cookie.c.bc: src\gfx\cookie.c
+obj/src/gfx/Cookie.c.bc: src\gfx\Cookie.c

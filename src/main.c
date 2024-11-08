@@ -115,6 +115,9 @@ void redraw(void) {
         textBeautifier(cpc, " per click");
         width = gfx_GetStringWidth(text) / 2;
         gfx_PrintStringXY(text, 160 - width, 30);
+
+        width = gfx_GetStringWidth("Cookie   Buildings   Upgrades   Achiev.  Settings") / 2;
+        gfx_PrintStringXY("Cookie   Buildings   Upgrades   Achiev.  Settings", 160 - width, 230);
     }
 
     gfx_SwapDraw();
@@ -160,9 +163,9 @@ void handle_keypresses(void) {
 
 int main(void) {
 
-    cookie = gfx_MallocSprite(cookie_width, cookie_height);
+    cookie = gfx_MallocSprite(Cookie_width, Cookie_height);
 
-    zx0_Decompress(cookie, cookie_compressed);
+    zx0_Decompress(cookie, Cookie_compressed);
 
     gfx_Begin();
     gfx_SetPalette(global_palette, sizeof_global_palette, 0);
