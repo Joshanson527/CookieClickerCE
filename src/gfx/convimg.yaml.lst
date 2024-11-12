@@ -2,12 +2,6 @@ global_palette.h
 global_palette.c
 Cookie.h
 Cookie.c
-Cursor.h
-Cursor.c
-Grandma.h
-Grandma.c
-Farm.h
-Farm.c
-Mines.h
-Mines.c
+Tileset.h
+Tileset.c
 gfx.h

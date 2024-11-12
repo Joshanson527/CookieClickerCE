@@ -8,10 +8,8 @@ extern "C" {
 #include "global_palette.h"
 #define sprites_palette_offset 0
 #include "Cookie.h"
-#include "Cursor.h"
-#include "Grandma.h"
-#include "Farm.h"
-#include "Mines.h"
+#define tileset_palette_offset 0
+#include "Tileset.h"
 
 #ifdef __cplusplus
 }

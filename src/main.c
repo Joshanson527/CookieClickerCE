@@ -15,6 +15,11 @@
  
 #include "gfx/gfx.h"
 
+#define TILE_WIDTH          16
+#define TILE_HEIGHT         16
+#define TILEMAP_WIDTH       8
+#define TILEMAP_HEIGHT      8
+
 uint64_t quintillion = 1000000000000000000;
 uint64_t quadrillion = 1000000000000000;
 uint64_t trillion = 1000000000000;
@@ -41,6 +46,11 @@ uint16_t buildingQuantities[5]; // Amount of each building
 uint8_t upgradeQuantities[5]; // Amount of each upgrade
 
 gfx_sprite_t *cookie;
+
+extern unsigned char tilemap_map_compressed[];
+uint8_t tilemap_map[TILEMAP_WIDTH * TILEMAP_HEIGHT];
+
+gfx_sprite_t *tileset_tiles[128];
 
 uint64_t costCalculator(int type , int level) {
     if (type) {
@@ -164,6 +174,33 @@ void handle_keypresses(void) {
 int main(void) {
 
     cookie = gfx_MallocSprite(Cookie_width, Cookie_height);
+
+    gfx_tilemap_t tilemap;
+    gfx_sprite_t *tmp_ptr;
+    gfx_sprite_t *tmp_ptr;
+    unsigned int i;
+    uint8_t tile_x_pos = 0;
+    uint8_t tile_y_pos = 0;
+
+    tilemap.map         = tilemap_map;
+    tilemap.tiles       = tileset_tiles;
+    tilemap.type_width  = gfx_tile_16_pixel;
+    tilemap.type_height = gfx_tile_16_pixel;
+    tilemap.tile_height = TILE_HEIGHT;
+    tilemap.tile_width  = TILE_WIDTH;
+    tilemap.draw_height = 1;
+    tilemap.draw_width  = 1;
+    tilemap.height      = TILEMAP_HEIGHT;
+    tilemap.width       = TILEMAP_WIDTH;
+    tilemap.y_loc       = tile_x_pos;
+    tilemap.x_loc       = tile_y_pos;
+
+    for (i = 0; i < sizeof(tileset_tiles) / sizeof(gfx_sprite_t*); ++i)
+    {
+        tmp_ptr = gfx_MallocSprite(TILE_WIDTH, TILE_HEIGHT);
+        zx0_Decompress(tmp_ptr, Tileset_tiles_compressed[i]);
+        tileset_tiles[i] = tmp_ptr;
+    }
 
     zx0_Decompress(cookie, Cookie_compressed);
 
