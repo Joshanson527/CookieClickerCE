@@ -14,11 +14,12 @@
 #include <time.h>
  
 #include "gfx/gfx.h"
+#include "tilemap/tilemap.c"
 
 #define TILE_WIDTH          16
 #define TILE_HEIGHT         16
-#define TILEMAP_WIDTH       8
-#define TILEMAP_HEIGHT      8
+#define TILEMAP_WIDTH       4
+#define TILEMAP_HEIGHT      3
 
 uint64_t quintillion = 1000000000000000000;
 uint64_t quadrillion = 1000000000000000;
@@ -32,7 +33,7 @@ uint8_t scale = 2;
 uint64_t cps = 10;
 uint64_t cpc = 10;
 char text[64];
-int i;
+unsigned int i;
 
 uint8_t buildingProductionRateMultiplier = 4;
 uint8_t buildingBaseCost = 15; // Base building cost
@@ -47,10 +48,13 @@ uint8_t upgradeQuantities[5]; // Amount of each upgrade
 
 gfx_sprite_t *cookie;
 
-extern unsigned char tilemap_map_compressed[];
 uint8_t tilemap_map[TILEMAP_WIDTH * TILEMAP_HEIGHT];
-
 gfx_sprite_t *tileset_tiles[128];
+gfx_tilemap_t tilemap;
+gfx_sprite_t *tmp_ptr;
+gfx_sprite_t *tmp_ptr;
+uint8_t tile_x_pos = 0;
+uint8_t tile_y_pos = 0;
 
 uint64_t costCalculator(int type , int level) {
     if (type) {
@@ -62,7 +66,7 @@ uint64_t costCalculator(int type , int level) {
 
 void updateCps() {
     cps = 0;
-    for (i = 0; i > 5; i++) {
+    for (i = 0; i < 5; i++) {
         double upgradeMultiplier = 1;
         if (upgradeQuantities[i] == 1) {
             upgradeMultiplier = 1.25;
@@ -93,6 +97,12 @@ void textBeautifier(uint64_t numCookies, char addition[16]) {
     } else {
         sprintf(text, "%llu cookie%s", numCookies, addition);
     }
+}
+
+void printSprite(uint8_t sprite[2], uint8_t pos[2]) {
+    tile_x_pos = pos[0];
+    tile_y_pos = pos[1];
+    gfx_TransparentTilemap(&tilemap, sprite[0] * TILE_WIDTH, sprite[1] * TILE_HEIGHT);
 }
 
 void redraw(void) {
@@ -128,6 +138,15 @@ void redraw(void) {
 
         width = gfx_GetStringWidth("Cookie   Buildings   Upgrades   Achiev.  Settings") / 2;
         gfx_PrintStringXY("Cookie   Buildings   Upgrades   Achiev.  Settings", 160 - width, 230);
+    } else if (page == 1) {
+        for (uint8_t x = 0; x < 2; x++) {
+            for (uint8_t y = 0; y < 10; y++) {
+                gfx_SetColor(4);
+                gfx_FillRectangle((x * 160) + 2, (y * 24) + 2, 156, 20);
+                gfx_SetColor(3);
+                gfx_Rectangle((x * 160) + 2, (y * 24) + 2, 156, 20);
+            }
+        }
     }
 
     gfx_SwapDraw();
@@ -175,13 +194,6 @@ int main(void) {
 
     cookie = gfx_MallocSprite(Cookie_width, Cookie_height);
 
-    gfx_tilemap_t tilemap;
-    gfx_sprite_t *tmp_ptr;
-    gfx_sprite_t *tmp_ptr;
-    unsigned int i;
-    uint8_t tile_x_pos = 0;
-    uint8_t tile_y_pos = 0;
-
     tilemap.map         = tilemap_map;
     tilemap.tiles       = tileset_tiles;
     tilemap.type_width  = gfx_tile_16_pixel;
@@ -195,14 +207,16 @@ int main(void) {
     tilemap.y_loc       = tile_x_pos;
     tilemap.x_loc       = tile_y_pos;
 
-    for (i = 0; i < sizeof(tileset_tiles) / sizeof(gfx_sprite_t*); ++i)
+    
+    for (i = 0; i < sizeof(tileset_tiles) / sizeof(gfx_sprite_t*); i++)
     {
         tmp_ptr = gfx_MallocSprite(TILE_WIDTH, TILE_HEIGHT);
-        zx0_Decompress(tmp_ptr, Tileset_tiles_compressed[i]);
-        tileset_tiles[i] = tmp_ptr;
+        zx7_Decompress(tmp_ptr, Tileset_tiles_compressed[i]);
+        //tileset_tiles[i] = tmp_ptr;
     }
+    
 
-    zx0_Decompress(cookie, Cookie_compressed);
+    zx7_Decompress(cookie, Cookie_compressed);
 
     gfx_Begin();
     gfx_SetPalette(global_palette, sizeof_global_palette, 0);
