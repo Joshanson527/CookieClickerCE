@@ -78,8 +78,14 @@ void updateCps() {
     }
 }
 
-void textBeautifier(uint64_t numCookies, char addition[16]) {
-    if (numCookies >= quintillion) {
+void textBeautifier(uint64_t numCookies, char addition[25]) {
+    if (numCookies >= octillion) {
+        sprintf(text, "%.2f octillion cookies%s", (double)numCookies / octillion, addition);
+     } else if (numCookies >= septillion) {
+        sprintf(text, "%.2f septillion cookies%s", (double)numCookies / septillion, addition);
+     } else if (numCookies >= sextillion) {
+        sprintf(text, "%.2f sextillion cookies%s", (double)numCookies / sextillion, addition);
+     } else if (numCookies >= quintillion) {
         sprintf(text, "%.2f quintillion cookies%s", (double)numCookies / quintillion, addition);
     } else if (numCookies >= quadrillion) {
         sprintf(text, "%.2f quadrillion cookies%s", (double)numCookies / quadrillion, addition);
