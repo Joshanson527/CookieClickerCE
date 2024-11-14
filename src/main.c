@@ -20,6 +20,9 @@
 #define TILEMAP_WIDTH       8
 #define TILEMAP_HEIGHT      8
 
+unit64_t octillion = 1000000000000000000000000000;
+unit64_t septillion = 1000000000000000000000000;
+unit64_t sextillion = 1000000000000000000000;
 uint64_t quintillion = 1000000000000000000;
 uint64_t quadrillion = 1000000000000000;
 uint64_t trillion = 1000000000000;
