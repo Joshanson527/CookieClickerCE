@@ -3,34 +3,59 @@
 	section	.text,"ax",@progbits
 	public	_costCalculator
 _costCalculator:
-	ld	hl, -3
+	ld	hl, -12
 	call	__frameset
-	ld	hl, (ix + 6)
-	ld	bc, (ix + 9)
-	add	hl, bc
+	ld	a, (ix + 6)
 	or	a, a
-	sbc	hl, bc
-	jr	nz, BB0_2
+	jp	nz, BB0_2
 	ld	a, (_buildingBaseCost)
-	or	a, a
-	sbc	hl, hl
-	push	hl
-	pop	de
-	ld	e, a
-	ld	a, (_buildingScalingFactor)
+	ld	bc, 0
+	push	bc
+	pop	hl
 	ld	l, a
-	call	__ixor
+	ld	(ix - 3), hl
+	ld	a, (_buildingScalingFactor)
+	ld	c, a
+	xor	a, a
+	call	__ultof
+	push	bc
+	pop	iy
+	ld	e, a
+	ld	bc, 0
+	ld	c, (ix + 9)
+	ld	(ix - 6), bc
+	xor	a, a
+	call	__ultof
+	ld	l, a
+	push	hl
+	push	bc
 	push	de
+	push	iy
+	call	_pow
+	push	hl
 	pop	bc
+	ld	a, e
+	pop	hl
+	pop	hl
+	pop	hl
+	pop	hl
+	call	__ftol
+	push	bc
+	pop	hl
+	ld	bc, (ix - 3)
 	call	__imulu
 	ld	(ix - 3), hl
 	ld	a, (_buildingGrowthFactor)
-	ld	de, 0
-	push	de
-	pop	iy
+	ld	bc, 0
+	ld	c, a
+	push	bc
+	pop	de
+	xor	a, a
+	call	__ultof
+	ld	(ix - 9), bc
 	ld	iyl, a
 	ld	c, 1
-	ld	hl, (ix + 9)
+	ld	hl, (ix - 6)
 	call	__ishl
 	push	hl
 	pop	bc
@@ -39,34 +64,79 @@ _costCalculator:
 	ld	hl, (hl)
 	ld	e, l
 	ld	d, h
-	ex	de, hl
-	lea	bc, iy
-	call	__ixor
+	push	de
+	pop	bc
+	xor	a, a
+	call	__ultof
+	ld	l, a
+	push	hl
+	push	bc
+	push	iy
+	ld	hl, (ix - 9)
+	push	hl
+	call	_pow
 	push	hl
 	pop	bc
+	ld	a, e
+	pop	hl
+	pop	hl
+	pop	hl
+	pop	hl
+	call	__ftol
 	ld	hl, (ix - 3)
 	jr	BB0_3
 BB0_2:
 	ld	hl, _upgradeQuantities
 	ld	a, (_upgradeBaseCost)
-	ld	iy, 0
-	lea	bc, iy
+	ld	de, 0
+	push	de
+	pop	bc
 	ld	c, a
+	ld	(ix - 3), bc
 	ld	a, (_upgradeGrowthFactor)
-	ld	(ix - 3), a
-	ld	de, (ix + 9)
-	add	hl, de
-	ld	a, (hl)
-	xor	a, (ix - 3)
+	push	de
+	pop	bc
+	ld	c, a
+	xor	a, a
+	call	__ultof
+	ld	(ix - 12), bc
 	ld	iyl, a
-	lea	hl, iy
+	push	de
+	pop	bc
+	ld	c, (ix + 9)
+	ld	(ix - 6), bc
+	add	hl, bc
+	ld	e, (hl)
+	ld	(ix - 9), de
+	push	de
+	pop	bc
+	xor	a, a
+	call	__ultof
+	ld	l, a
+	push	hl
+	push	bc
+	push	iy
+	ld	hl, (ix - 12)
+	push	hl
+	call	_pow
+	push	hl
+	pop	bc
+	ld	a, e
+	pop	hl
+	pop	hl
+	pop	hl
+	pop	hl
+	call	__ftol
+	push	bc
+	pop	hl
+	ld	bc, (ix - 3)
 	call	__imulu
 	push	hl
 	pop	de
 	ld	a, (_upgradeScalingFactor)
-	ld	iyl, a
-	lea	hl, iy
-	ld	bc, (ix + 9)
+	ld	hl, (ix - 9)
+	ld	l, a
+	ld	bc, (ix - 6)
 	call	__imulu
 	push	hl
 	pop	bc
@@ -93,113 +163,138 @@ BB0_3:
 	section	.text,"ax",@progbits
 	public	_updateCps
 _updateCps:
-	ld	hl, -22
+	ld	hl, -13
 	call	__frameset
-	ld	hl, _buildingQuantities
-	ld	(ix - 3), hl
-	or	a, a
-	sbc	hl, hl
-	ld.sis	de, 0
-	ld	(ix - 6), de
-	ld	a, (_buildingProductionRateMultiplier)
 	ld	de, 0
-	ld	e, a
-	ld	(ix - 15), de
-	ld	bc, 5
-	ld	(ix - 9), hl
-	ld	(ix - 12), hl
-	ex	de, hl
-BB1_1:
-	push	de
-	pop	hl
-	or	a, a
-	sbc	hl, bc
-	jp	z, BB1_7
-	ld	hl, _upgradeQuantities
+	ld.sis	hl, 0
+	ld	iy, _cps
+	ld	(_cps), de
+	ld	(_cps+3), de
+	lea	iy, iy + 6
+	ld	(ix - 6), iy
+	ld	(iy), l
+	ld	(iy + 1), h
+	ld	hl, 16
 	push	de
 	pop	bc
+	ex	de, hl
+BB1_1:
+	push	bc
+	pop	hl
+	ld	(_i), hl
+	or	a, a
+	sbc	hl, de
+	jp	nc, BB1_7
+	ld	hl, _upgradeQuantities
+	ld	(ix - 3), bc
 	add	hl, bc
 	ld	a, (hl)
 	cp	a, 1
 	ld	hl, -6291456
-	ex	de, hl
-	ld	l, 63
+	ld	e, 63
 	jr	z, BB1_6
 	cp	a, 2
 	ld	hl, -4194304
-	ex	de, hl
-	ld	l, 63
+	ld	e, 63
 	jr	z, BB1_6
 	cp	a, 3
 	ld	hl, 0
-	ex	de, hl
 	ld	a, 64
-	ld	l, a
+	ld	e, a
 	jr	z, BB1_6
 	ld	hl, -8388608
-	ex	de, hl
-	ld	a, 63
-	ld	l, a
+	ld	e, 63
 BB1_6:
-	ld	(ix - 19), l
+	ld	(ix - 10), e
+	ld	(ix - 9), hl
+	ld	a, (_buildingProductionRateMultiplier)
+	or	a, a
+	sbc	hl, hl
+	push	hl
+	pop	bc
+	ld	c, a
+	ld	iyl, 0
+	ld	a, iyl
+	call	__ultof
 	push	bc
 	pop	hl
-	ld	(ix - 18), bc
-	ld	bc, (ix - 15)
-	call	__ixor
-	ld	iy, (ix - 3)
-	ld	iy, (iy)
-	ld	bc, 0
-	ld	c, iyl
-	ld	b, iyh
+	ld	e, a
+	ld	bc, (ix - 3)
+	ld	a, iyl
+	call	__ultof
+	ld	iyl, a
+	push	iy
+	push	bc
+	push	de
+	push	hl
+	call	_pow
+	push	hl
+	pop	bc
+	ld	a, e
+	pop	hl
+	pop	hl
+	pop	hl
+	pop	hl
+	call	__ftol
+	push	bc
+	pop	de
+	ld	hl, (_i)
+	ld	(ix - 3), hl
+	ld	c, 1
+	call	__ishl
+	push	hl
+	pop	bc
+	ld	hl, _buildingQuantities
+	add	hl, bc
+	ld	bc, (hl)
+	or	a, a
+	sbc	hl, hl
+	ld	l, c
+	ld	h, b
+	push	de
+	pop	bc
 	call	__imulu
 	push	hl
 	pop	bc
-	xor	a, a
-	call	__ultof
-	ld	(ix - 22), bc
-	ld	hl, (ix - 9)
-	push	de
+	push	bc
 	pop	iy
-	ld	de, (ix - 12)
-	ld	bc, (ix - 6)
+	add	iy, iy
+	sbc	hl, hl
+	ld	a, l
+	call	__ltof
+	ld	(ix - 13), bc
+	ld	hl, (_cps)
+	ld	iy, _cps
+	lea	iy, iy + 3
+	ld	de, (iy)
+	ld	iy, (ix - 6)
+	ld	bc, (iy)
 	call	__ulltof
-	ld	(ix - 6), hl
+	push	hl
+	pop	iy
 	ld	d, e
-	ld	bc, (ix - 22)
-	lea	hl, iy
-	ld	e, (ix - 19)
+	ld	bc, (ix - 13)
+	ld	hl, (ix - 9)
+	ld	e, (ix - 10)
 	call	__fmul
-	ld	hl, (ix - 6)
+	lea	hl, iy
 	ld	e, d
 	call	__fadd
 	push	bc
 	pop	hl
 	ld	e, a
 	call	__ftoull
-	ld	(ix - 9), hl
-	ld	(ix - 12), de
-	ld	(ix - 6), bc
-	ld	de, (ix - 18)
-	inc	de
-	ld	iy, (ix - 3)
-	lea	iy, iy + 2
-	ld	(ix - 3), iy
-	ld	bc, 5
+	ld	(_cps), hl
+	ld	(_cps+3), de
+	ld	hl, (ix - 6)
+	ld	(hl), c
+	inc	hl
+	ld	(hl), b
+	ld	bc, (ix - 3)
+	inc	bc
+	ld	de, 16
 	jp	BB1_1
 BB1_7:
-	ld	hl, 5
-	ld	(_i), hl
-	ld	hl, (ix - 9)
-	ld	(_cps), hl
-	ld	hl, (ix - 12)
-	ld	(_cps+3), hl
-	ld	iy, _cps
-	lea	hl, iy + 6
-	ld	de, (ix - 6)
-	ld	(hl), e
-	inc	hl
-	ld	(hl), d
 	ld	sp, ix
 	pop	ix
 	ret
@@ -481,45 +576,47 @@ BB2_17:
 	section	.text,"ax",@progbits
 	public	_printSprite
 _printSprite:
-	ld	hl, -3
+	ld	hl, -1
 	call	__frameset
-	ld	hl, (ix + 6)
-	ld	iy, (ix + 9)
-	ld	a, (iy)
-	ld	(_tile_x_pos), a
-	ld	a, (iy + 1)
-	ld	(_tile_y_pos), a
+	ld	a, (ix + 12)
+	ld	(ix - 1), a
+	ld	a, (ix + 15)
+	ld	iy, _tileset_tiles_data
 	ld	de, 0
-	ld	e, (hl)
-	ld	c, 4
 	push	de
 	pop	hl
-	call	__ishl
-	ld	(ix - 3), hl
-	ld	iy, (ix + 6)
-	ld	e, (iy + 1)
-	ex	de, hl
-	call	__ishl
+	ld	l, (ix + 9)
+	ld	bc, 3
+	call	__imulu
 	push	hl
-	ld	hl, (ix - 3)
-	push	hl
-	ld	hl, _tilemap
-	push	hl
-	call	_gfx_TransparentTilemap
-	ld	sp, ix
+	pop	bc
+	add	iy, bc
+	ld	hl, (iy)
+	push	de
+	pop	bc
+	ld	c, (ix - 1)
+	ld	e, a
+	ld	(ix + 6), hl
+	ld	(ix + 9), bc
+	ld	(ix + 12), de
+	inc	sp
 	pop	ix
-	ret
+	jp	_gfx_TransparentSprite
 	section	.text,"ax",@progbits
 
 	section	.text,"ax",@progbits
 	public	_redraw
 _redraw:
-	ld	hl, -9
+	ld	hl, -46
 	call	__frameset
 	ld	l, 3
 	ld	(ix - 3), hl
-	ld	hl, 1
-	push	hl
+	ld	de, 1
+	ld	hl, _buildingQuantities
+	ld	(ix - 6), hl
+	ld	hl, _upgradeQuantities
+	ld	(ix - 12), hl
+	push	de
 	call	_gfx_SetDraw
 	pop	hl
 	ld	bc, 16
@@ -717,8 +814,305 @@ BB4_8:
 	call	_gfx_PrintStringXY
 	pop	hl
 	pop	hl
+	jp	BB4_30
+BB4_9:
+	dec	l
+	ld	a, l
+	cp	a, 2
+	jp	nc, BB4_31
+	ld	de, 2
+	xor	a, a
+	ld	(ix - 22), a
+	ld	bc, 0
+	ld	(ix - 21), bc
+BB4_11:
+	push	bc
 	pop	hl
+	or	a, a
+	sbc	hl, de
+	jp	z, BB4_29
+	ld	(ix - 25), bc
+	push	bc
+	pop	hl
+	ld	bc, 160
+	call	__imulu
+	push	hl
+	pop	iy
+	ld	de, 2
+	add	iy, de
+	ld	(ix - 28), iy
+	ld	a, l
+	add	a, 4
+	ld	e, a
+	ld	(ix - 43), de
+	ld	de, 20
+	add	hl, de
+	ld	(ix - 37), hl
+	ld	iy, (ix - 6)
+	ld	l, (ix - 22)
+	ld	(ix - 18), hl
+	ld	hl, 16
+	ld	(ix - 9), hl
+	ld	a, 4
+	ld	c, a
+	or	a, a
+	sbc	hl, hl
+	ld	(ix - 15), hl
+BB4_13:
+	ld	hl, (ix - 9)
+	ld	de, 240
+	or	a, a
+	sbc	hl, de
+	jp	z, BB4_28
+	ld	(ix - 31), bc
+	ld	(ix - 34), iy
+	ld	hl, 4
+	push	hl
+	call	_gfx_SetColor
+	pop	hl
+	ld	iy, (ix - 9)
+	ld	de, -14
+	add	iy, de
+	ld	hl, 26
+	push	hl
+	ld	hl, 156
+	push	hl
+	ld	(ix - 40), iy
+	push	iy
+	ld	hl, (ix - 28)
+	push	hl
+	call	_gfx_FillRectangle
+	pop	hl
+	pop	hl
+	pop	hl
+	pop	hl
+	ld	a, (_cursorx)
+	ld	iy, 0
+	lea	bc, iy
+	ld	c, a
+	ld	a, (_cursory)
+	ld	e, a
+	ld	hl, (ix - 25)
+	or	a, a
+	sbc	hl, bc
+	ld	a, -1
+	jr	z, BB4_16
+	ld	a, 0
+BB4_16:
+	lea	bc, iy
+	ld	c, e
+	ld	hl, (ix - 15)
+	or	a, a
+	sbc	hl, bc
+	ld	l, -1
+	jr	z, BB4_18
+	ld	l, 0
+BB4_18:
+	and	a, l
+	bit	0, a
+	ld	a, 0
+	ld	l, a
+	jp	nz, BB4_20
+	ld	l, 3
+BB4_20:
+	push	hl
+	call	_gfx_SetColor
+	pop	hl
+	ld	hl, 26
+	push	hl
+	ld	hl, 156
+	push	hl
+	ld	hl, (ix - 40)
+	push	hl
+	ld	hl, (ix - 28)
+	push	hl
+	call	_gfx_Rectangle
+	pop	hl
+	pop	hl
+	pop	hl
+	pop	hl
+	ld	hl, (ix - 21)
+	ld	de, (ix - 15)
+	add	hl, de
+	ld	de, 15
+	or	a, a
+	sbc	hl, de
+	jp	nc, BB4_27
+	ld	hl, (ix - 18)
+	inc	l
+	ld	de, (ix - 31)
+	push	de
+	ld	de, (ix - 43)
+	push	de
+	push	hl
+	push	hl
+	call	_printSprite
+	pop	hl
+	pop	hl
+	pop	hl
+	pop	hl
+	ld	a, (_page)
+	ld	l, a
+	dec	l
+	ld	de, (ix - 18)
+	push	de
+	push	hl
+	call	_costCalculator
+	ld	(ix - 40), hl
+	ld	(ix - 46), de
+	pop	hl
+	pop	hl
+	ld	hl, (_cookies)
+	ld	de, (_cookies+3)
+	ld	iy, _cookies
+	lea	iy, iy + 6
+	ld	iy, (iy)
+	push	bc
+	ld	bc, (ix - 46)
+	push	bc
+	ld	bc, (ix - 40)
+	push	bc
+	ld	c, iyl
+	ld	b, iyh
+	call	__llcmpu
+	pop	hl
+	pop	hl
+	pop	hl
+	ld	a, 6
+	ld	l, a
+	jr	c, BB4_23
+	ld	a, 5
+	ld	l, a
+BB4_23:
+	push	hl
+	call	_gfx_SetTextFGColor
+	pop	hl
+	ld	hl, 4
+	push	hl
+	call	_gfx_SetTextBGColor
+	pop	hl
+	ld	a, (_page)
+	ld	l, a
+	dec	l
+	ld	de, (ix - 18)
+	push	de
+	push	hl
+	call	_costCalculator
+	pop	iy
+	pop	iy
+	ld	iy, _.str.8
+	push	iy
+	push	bc
+	push	de
+	push	hl
+	call	_textBeautifier
+	pop	hl
+	pop	hl
+	pop	hl
+	pop	hl
+	ld	hl, (ix - 9)
+	ld	de, -10
+	add	hl, de
+	push	hl
+	ld	hl, (ix - 37)
+	push	hl
+	ld	hl, _text
+	push	hl
+	call	_gfx_PrintStringXY
+	pop	hl
+	pop	hl
+	pop	hl
+	or	a, a
+	sbc	hl, hl
+	push	hl
+	call	_gfx_SetTextFGColor
+	pop	hl
+	ld	a, (_page)
+	cp	a, 1
+	jr	nz, BB4_25
+	ld	hl, (ix - 34)
+	ld	de, (hl)
+	or	a, a
+	sbc	hl, hl
+	ld	l, e
+	ld	h, d
+	jr	BB4_26
+BB4_25:
+	ld	iy, (ix - 12)
+	ld	de, (ix - 15)
+	add	iy, de
+	or	a, a
+	sbc	hl, hl
+	ld	l, (iy)
+BB4_26:
+	push	hl
 	ld	hl, _.str.11
+	push	hl
+	ld	hl, _text
+	push	hl
+	call	_sprintf
+	pop	hl
+	pop	hl
+	pop	hl
+	ld	hl, (ix - 9)
+	push	hl
+	ld	hl, (ix - 37)
+	push	hl
+	ld	hl, _text
+	push	hl
+	call	_gfx_PrintStringXY
+	pop	hl
+	pop	hl
+	pop	hl
+BB4_27:
+	ld	hl, (ix - 15)
+	inc	hl
+	ld	(ix - 15), hl
+	ld	hl, (ix - 31)
+	ld	a, l
+	add	a, 28
+	ld	c, a
+	ld	de, 28
+	ld	hl, (ix - 9)
+	add	hl, de
+	ld	(ix - 9), hl
+	ld	hl, (ix - 18)
+	inc	l
+	ld	(ix - 18), hl
+	ld	iy, (ix - 34)
+	lea	iy, iy + 2
+	jp	BB4_13
+BB4_28:
+	ld	bc, (ix - 25)
+	inc	bc
+	ld	de, 10
+	ld	hl, (ix - 21)
+	add	hl, de
+	ld	(ix - 21), hl
+	ld	a, (ix - 22)
+	add	a, 8
+	ld	(ix - 22), a
+	ld	iy, (ix - 12)
+	lea	iy, iy + 8
+	ld	(ix - 12), iy
+	ld	iy, (ix - 6)
+	lea	iy, iy + 16
+	ld	(ix - 6), iy
+	ld	de, 2
+	jp	BB4_11
+BB4_29:
+	or	a, a
+	sbc	hl, hl
+	push	hl
+	call	_gfx_SetTextFGColor
+	pop	hl
+	ld	hl, 3
+	push	hl
+	call	_gfx_SetTextBGColor
+BB4_30:
+	pop	hl
+BB4_31:
+	ld	hl, _.str.12
 	push	hl
 	call	_gfx_GetStringWidth
 	pop	de
@@ -734,87 +1128,12 @@ BB4_8:
 	ld	de, 230
 	push	de
 	push	hl
-	ld	hl, _.str.11
+	ld	hl, _.str.12
 	push	hl
 	call	_gfx_PrintStringXY
 	pop	hl
 	pop	hl
 	pop	hl
-	jp	BB4_15
-BB4_9:
-	ld	a, l
-	cp	a, 1
-	ld	de, 0
-	jp	nz, BB4_15
-BB4_10:
-	ld	bc, 2
-	push	de
-	pop	hl
-	or	a, a
-	sbc	hl, bc
-	jp	z, BB4_15
-	ld	(ix - 9), de
-	ex	de, hl
-	ld	bc, 160
-	call	__imulu
-	push	hl
-	pop	iy
-	ld	hl, 2
-	ex	de, hl
-	add	iy, de
-	ld	(ix - 6), iy
-	push	de
-	pop	iy
-BB4_12:
-	lea	hl, iy
-	ld	de, 242
-	or	a, a
-	sbc	hl, de
-	jr	z, BB4_14
-	ld	hl, 4
-	push	hl
-	ld	(ix - 3), iy
-	call	_gfx_SetColor
-	pop	hl
-	ld	hl, 20
-	push	hl
-	ld	hl, 156
-	push	hl
-	ld	hl, (ix - 3)
-	push	hl
-	ld	hl, (ix - 6)
-	push	hl
-	call	_gfx_FillRectangle
-	pop	hl
-	pop	hl
-	pop	hl
-	pop	hl
-	ld	hl, 3
-	push	hl
-	call	_gfx_SetColor
-	pop	hl
-	ld	hl, 20
-	push	hl
-	ld	hl, 156
-	push	hl
-	ld	hl, (ix - 3)
-	push	hl
-	ld	hl, (ix - 6)
-	push	hl
-	call	_gfx_Rectangle
-	ld	iy, (ix - 3)
-	pop	hl
-	pop	hl
-	pop	hl
-	pop	hl
-	ld	de, 24
-	add	iy, de
-	jr	BB4_12
-BB4_14:
-	ld	de, (ix - 9)
-	inc	de
-	jp	BB4_10
-BB4_15:
 	call	_gfx_SwapDraw
 	xor	a, a
 	ld	(_draw), a
@@ -826,7 +1145,7 @@ BB4_15:
 	section	.text,"ax",@progbits
 	public	_handle_keypresses
 _handle_keypresses:
-	ld	hl, -18
+	ld	hl, -24
 	call	__frameset
 	call	_kb_Scan
 	ld	hl, -720878
@@ -840,38 +1159,47 @@ _handle_keypresses:
 	ld	e, l
 	ld	a, (_click)
 	ld	l, a
+	ld	a, (_page)
+	ld	c, a
 	bit	5, e
-	jp	z, BB5_9
+	ld	iy, _cookies
+	lea	de, iy + 3
+	ld	(ix - 9), de
+	lea	de, iy + 6
+	ld	(ix - 6), de
+	ld	(ix - 3), bc
+	jp	z, BB5_10
 	ld	a, l
 	or	a, a
-	ld	c, 1
 	jp	nz, BB5_10
-	ld	iy, _cookies
-	ld	bc, _cpc
+	ld	a, c
+	or	a, a
+	ld	iy, -720878
+	jp	nz, BB5_11
+	ld	iy, _cpc
 	ld	hl, (_cookies)
-	ld	(ix - 3), hl
-	lea	hl, iy + 3
+	ld	(ix - 21), hl
+	ld	hl, (ix - 9)
 	ld	hl, (hl)
-	ld	(ix - 6), hl
-	lea	hl, iy + 6
-	ld	(ix - 9), hl
-	ld	hl, (hl)
-	ld	de, (_cpc)
-	ld	(ix - 12), de
-	ld	de, (_cpc+3)
-	push	bc
-	pop	iy
-	lea	iy, iy + 6
-	ld	bc, (iy)
-	push	hl
+	ld	(ix - 18), hl
 	ld	hl, (ix - 6)
+	ld	de, (hl)
+	ld	hl, (_cpc)
+	ld	(ix - 12), hl
+	ld	hl, (_cpc+3)
+	ld	(ix - 15), hl
+	lea	hl, iy + 6
+	ld	bc, (hl)
+	push	de
+	ld	hl, (ix - 18)
 	push	hl
-	ld	hl, (ix - 3)
+	ld	hl, (ix - 21)
 	push	hl
 	ld	hl, (ix - 12)
+	ld	de, (ix - 15)
 	call	__lladd
-	ld	(ix - 3), hl
-	ld	(ix - 6), de
+	ld	(ix - 12), hl
+	ld	(ix - 15), de
 	pop	iy
 	pop	iy
 	pop	iy
@@ -880,14 +1208,14 @@ _handle_keypresses:
 	ld	iy, _quintillion
 	lea	iy, iy + 6
 	ld	iy, (iy)
-	ld	(ix - 12), iy
+	ld	(ix - 18), iy
 	push	iy
-	ld	(ix - 15), hl
+	ld	(ix - 21), hl
 	push	hl
-	ld	(ix - 18), de
+	ld	(ix - 24), de
 	push	de
-	ld	hl, (ix - 3)
-	ld	de, (ix - 6)
+	ld	hl, (ix - 12)
+	ld	de, (ix - 15)
 	call	__llcmpu
 	pop	iy
 	pop	iy
@@ -896,97 +1224,374 @@ _handle_keypresses:
 	sbc	a, a
 	inc	a
 	bit	0, a
-	jr	nz, BB5_4
-	ld	hl, (ix - 18)
-	ld	(ix - 3), hl
-BB5_4:
+	jr	nz, BB5_5
+	ld	hl, (ix - 24)
+	ld	(ix - 12), hl
+BB5_5:
 	bit	0, a
-	ld	de, (ix - 6)
-	jr	nz, BB5_6
 	ld	de, (ix - 15)
-BB5_6:
+	jr	nz, BB5_7
+	ld	de, (ix - 21)
+BB5_7:
 	bit	0, a
-	ld	iyl, 1
-	ld	a, iyl
-	jp	nz, BB5_8
-	ld	bc, (ix - 12)
-BB5_8:
-	ld	hl, (ix - 3)
+	ld	iy, -720878
+	jp	nz, BB5_9
+	ld	bc, (ix - 18)
+BB5_9:
+	ld	hl, (ix - 12)
 	ld	(_cookies), hl
 	ld	(_cookies+3), de
-	ld	hl, (ix - 9)
+	ld	hl, (ix - 6)
 	ld	(hl), c
 	inc	hl
 	ld	(hl), b
+	ld	a, 1
 	ld	(_click), a
 	ld	(_draw), a
 	ld	l, a
-	ld	c, a
-	jr	BB5_10
-BB5_9:
-	ld	c, 1
+	jr	BB5_11
 BB5_10:
 	ld	iy, -720878
+BB5_11:
 	ld	e, (iy)
 	ld	d, (iy + 1)
 	ld	a, e
 	bit	5, a
-	ld	e, iyh
-	jr	nz, BB5_14
+	ld	d, 1
+	jr	nz, BB5_15
 	ld	a, l
 	or	a, a
-	jr	z, BB5_13
-	ld	a, c
+	jr	z, BB5_14
+	ld	a, d
 	ld	(_draw), a
-BB5_13:
-	ld	a, e
-	ld	(_click), a
 BB5_14:
+	xor	a, a
+	ld	(_click), a
+BB5_15:
+	ld	hl, -720866
+	push	de
+	ld	e, (hl)
+	inc	hl
+	ld	d, (hl)
+	ld	l, e
+	ld	h, d
+	pop	de
+	ld.sis	bc, 1
+	call	__sand
+	bit	0, l
+	jr	z, BB5_19
+	ld	a, (_cursory)
+	ld	l, a
+	ld	a, (_keyDown)
+	ld	e, a
+	ld	a, l
+	cp	a, 9
+	jr	z, BB5_19
+	ld	a, e
+	or	a, a
+	jr	nz, BB5_19
+	inc	l
+	ld	a, l
+	ld	(_cursory), a
+	ld	a, d
+	ld	(_keyDown), a
+	ld	(_draw), a
+BB5_19:
+	ld	hl, -720866
+	push	de
+	ld	e, (hl)
+	inc	hl
+	ld	d, (hl)
+	ld	l, e
+	ld	h, d
+	pop	de
+	ld	a, l
+	bit	3, a
+	jr	z, BB5_23
+	ld	a, (_cursory)
+	ld	l, a
+	ld	a, (_keyDown)
+	ld	e, a
+	ld	a, l
+	or	a, a
+	jr	z, BB5_23
+	ld	a, e
+	or	a, a
+	jr	nz, BB5_23
+	dec	l
+	ld	a, l
+	ld	(_cursory), a
+	ld	a, d
+	ld	(_keyDown), a
+	ld	(_draw), a
+BB5_23:
+	ld	hl, -720866
+	push	de
+	ld	e, (hl)
+	inc	hl
+	ld	d, (hl)
+	ld	l, e
+	ld	h, d
+	pop	de
+	ld	a, l
+	bit	2, a
+	jr	z, BB5_27
+	ld	a, (_cursorx)
+	ld	l, a
+	ld	a, (_keyDown)
+	ld	e, a
+	ld	a, l
+	cp	a, 1
+	jr	z, BB5_27
+	ld	a, e
+	or	a, a
+	jr	nz, BB5_27
+	inc	l
+	ld	a, l
+	ld	(_cursorx), a
+	ld	a, d
+	ld	(_keyDown), a
+	ld	(_draw), a
+BB5_27:
+	ld	hl, -720866
+	push	de
+	ld	e, (hl)
+	inc	hl
+	ld	d, (hl)
+	ld	l, e
+	ld	h, d
+	pop	de
+	ld	a, l
+	bit	1, a
+	jr	z, BB5_31
+	ld	a, (_cursorx)
+	ld	l, a
+	ld	a, (_keyDown)
+	ld	e, a
+	ld	a, l
+	or	a, a
+	jr	z, BB5_31
+	ld	a, e
+	or	a, a
+	jr	nz, BB5_31
+	dec	l
+	ld	a, l
+	ld	(_cursorx), a
+	ld	a, d
+	ld	(_keyDown), a
+	ld	(_draw), a
+BB5_31:
+	ld	iy, -720866
 	ld	l, (iy)
 	ld	h, (iy + 1)
-	ld	a, l
-	bit	4, a
-	jr	nz, BB5_22
+	ld.sis	bc, 1
+	call	__sand
+	bit	0, l
+	jr	nz, BB5_36
 	ld	l, (iy)
 	ld	h, (iy + 1)
 	ld	a, l
 	bit	3, a
-	ld	e, c
-	jr	nz, BB5_22
+	jr	nz, BB5_36
 	ld	l, (iy)
 	ld	h, (iy + 1)
 	ld	a, l
 	bit	2, a
-	jr	nz, BB5_20
+	jr	nz, BB5_36
 	ld	l, (iy)
 	ld	h, (iy + 1)
 	ld	a, l
 	bit	1, a
-	jr	nz, BB5_21
-	ld	a, c
-	ld.sis	bc, 1
+	jr	nz, BB5_36
+	xor	a, a
+	ld	(_keyDown), a
+BB5_36:
+	ld	iy, -720878
 	ld	l, (iy)
 	ld	h, (iy + 1)
+	ld	a, l
+	bit	5, a
+	ld	bc, (ix - 3)
+	jp	z, BB5_44
+	dec	c
+	ld	a, c
+	cp	a, 2
+	jp	nc, BB5_44
+	ld	e, 10
+	ld	a, (_cursorx)
+	ld	d, a
+	ld	(ix - 18), de
+	mlt	de
+	ld	a, (_cursory)
+	ld	l, a
+	ld	a, e
+	add	a, l
+	ld	l, a
+	push	hl
+	push	bc
+	call	_costCalculator
+	ld	(ix - 3), hl
+	ld	(ix - 12), de
+	pop	hl
+	pop	hl
+	ld	hl, (_cookies)
+	ld	de, (_cookies+3)
+	ld	iy, (ix - 6)
+	ld	iy, (iy)
+	ld	(ix - 15), iy
+	ld	a, (_click)
+	push	bc
+	ld	bc, (ix - 12)
+	push	bc
+	ld	bc, (ix - 3)
+	push	bc
+	ld	iy, -720878
+	ld	bc, (ix - 15)
+	call	__llcmpu
+	ld	d, 1
+	pop	hl
+	pop	hl
+	pop	hl
+	jp	c, BB5_44
+	or	a, a
+	jp	nz, BB5_44
+	ld	a, (_page)
+	ld	e, a
+	dec	e
+	ld	a, (_cursorx)
+	ld	bc, (ix - 18)
+	ld	b, a
+	mlt	bc
+	ld	a, (_cursory)
+	ld	l, a
+	ld	a, c
+	add	a, l
+	ld	l, a
+	push	hl
+	push	de
+	call	_costCalculator
+	ld	(ix - 3), hl
+	ld	(ix - 12), de
+	pop	de
+	pop	de
+	ld	iy, (_cookies)
+	ld	hl, (ix - 9)
+	ld	de, (hl)
+	ld	hl, (ix - 6)
+	ld	hl, (hl)
+	ld	(ix - 9), hl
+	push	bc
+	ld	hl, (ix - 12)
+	push	hl
+	ld	hl, (ix - 3)
+	push	hl
+	lea	hl, iy
+	ld	bc, (ix - 9)
+	call	__llsub
+	pop	iy
+	pop	iy
+	pop	iy
+	ld	(_cookies), hl
+	ld	(_cookies+3), de
+	ld	hl, (ix - 6)
+	ld	(hl), c
+	inc	hl
+	ld	(hl), b
+	ld	a, (_page)
+	ld	iyl, a
+	ld	a, (_cursorx)
+	ld	de, 0
+	ld	e, a
+	push	de
+	pop	hl
+	ld	bc, 10
+	call	__imulu
+	ld	a, (_cursory)
+	ld	e, a
+	add	hl, de
+	ex	de, hl
+	ld	a, iyl
+	cp	a, 1
+	jr	nz, BB5_42
+	ld	iy, _buildingQuantities
+	ld	c, 1
+	ex	de, hl
+	call	__ishl
+	push	hl
+	pop	de
+	add	iy, de
+	ld	hl, (iy)
+	inc.sis	hl
+	ld	(iy), l
+	ld	(iy + 1), h
+	jr	BB5_43
+BB5_42:
+	ld	hl, _upgradeQuantities
+	add	hl, de
+	inc	(hl)
+BB5_43:
+	call	_updateCps
+	ld	d, 1
+	ld	a, d
+	ld	(_click), a
+	ld	(_draw), a
+	ld	iy, -720878
+BB5_44:
+	ld	l, (iy)
+	ld	h, (iy + 1)
+	ld	a, l
+	bit	4, a
+	jr	nz, BB5_50
+	ld	l, (iy)
+	ld	h, (iy + 1)
+	ld	a, l
+	bit	3, a
+	jr	nz, BB5_52
+	ld	l, (iy)
+	ld	h, (iy + 1)
+	ld	a, l
+	bit	2, a
+	jr	nz, BB5_53
+	ld	l, (iy)
+	ld	h, (iy + 1)
+	ld	a, l
+	bit	1, a
+	jr	nz, BB5_56
+	ld	l, (iy)
+	ld	h, (iy + 1)
+	ld.sis	bc, 1
 	call	__sand
 	bit	0, l
-	jr	z, BB5_23
-	ld	e, 4
-	ld	c, a
-	jr	BB5_22
-BB5_20:
-	ld	e, 2
-	jr	BB5_22
-BB5_21:
-	ld	e, 3
-BB5_22:
-	ld	a, e
+	jr	z, BB5_55
+	ld	a, 4
+	jr	BB5_51
+BB5_50:
+	xor	a, a
+BB5_51:
 	ld	(_page), a
-	ld	a, c
+	ld	a, d
 	ld	(_draw), a
-BB5_23:
+	jr	BB5_55
+BB5_52:
+	ld	a, d
+	ld	(_page), a
+	jr	BB5_54
+BB5_53:
+	ld	a, 2
+	ld	(_page), a
+	ld	a, d
+BB5_54:
+	ld	(_draw), a
+	xor	a, a
+	ld	(_cursorx), a
+	ld	(_cursory), a
+BB5_55:
 	ld	sp, ix
 	pop	ix
 	ret
+BB5_56:
+	ld	a, 3
+	jr	BB5_51
 	section	.text,"ax",@progbits
 
 	section	.text,"ax",@progbits
@@ -1004,69 +1609,6 @@ _main:
 	pop	de
 	pop	de
 	ld	(_cookie), hl
-	ld	hl, _tilemap_map
-	ld	(_tilemap), hl
-	ld	hl, _tileset_tiles
-	ld	(_tilemap+3), hl
-	ld	a, 4
-	ld	(_tilemap+10), a
-	ld	l, a
-	ld	(_tilemap+11), a
-	ld	a, 16
-	ld	(_tilemap+6), a
-	ld	(_tilemap+7), a
-	ld	a, 1
-	ld	(_tilemap+8), a
-	ld	(_tilemap+9), a
-	ld	a, 3
-	ld	(_tilemap+12), a
-	ld	a, l
-	ld	(_tilemap+13), a
-	ld	a, (_tile_x_pos)
-	ld	(_tilemap+14), a
-	ld	a, (_tile_y_pos)
-	or	a, a
-	sbc	hl, hl
-	ld	l, a
-	ld	(_tilemap+15), hl
-	ld	de, 128
-	sbc	hl, hl
-BB6_1:
-	ld	(_i), hl
-	or	a, a
-	sbc	hl, de
-	jr	nc, BB6_3
-	ld	hl, _malloc
-	push	hl
-	ld	hl, 16
-	push	hl
-	push	hl
-	call	_gfx_AllocSprite
-	push	hl
-	pop	de
-	pop	hl
-	pop	hl
-	pop	hl
-	ld	(_tmp_ptr), de
-	ld	hl, (_i)
-	ld	bc, 3
-	call	__imulu
-	push	hl
-	pop	bc
-	ld	hl, _Tileset_tiles_compressed
-	add	hl, bc
-	ld	hl, (hl)
-	push	hl
-	push	de
-	call	_zx7_Decompress
-	ld	de, 128
-	pop	hl
-	pop	hl
-	ld	hl, (_i)
-	inc	hl
-	jr	BB6_1
-BB6_3:
-	ld	hl, (_cookie)
 	ld	de, _Cookie_compressed
 	push	de
 	push	hl
@@ -1077,7 +1619,7 @@ BB6_3:
 	or	a, a
 	sbc	hl, hl
 	push	hl
-	ld	hl, 152
+	ld	hl, 198
 	push	hl
 	ld	hl, _global_palette
 	push	hl
@@ -1105,23 +1647,21 @@ BB6_3:
 	call	_redraw
 	call	_kb_Scan
 	call	_clock
+	ld	iy, -720868
+	lea	bc, iy
 	ld	(ix - 3), hl
 	ld	(ix - 4), e
 	ld	iy, _cps
 	lea	hl, iy + 6
 	ld	(ix - 7), hl
-BB6_4:
-	ld	hl, -720868
-	push	de
-	ld	e, (hl)
-	inc	hl
-	ld	d, (hl)
-	ld	l, e
-	ld	h, d
-	pop	de
+	push	bc
+	pop	iy
+BB6_1:
+	ld	l, (iy)
+	ld	h, (iy + 1)
 	ld	a, l
 	bit	6, a
-	jp	nz, BB6_8
+	jp	nz, BB6_5
 	ld	a, (_draw)
 	bit	0, a
 	call	nz, _redraw
@@ -1140,7 +1680,7 @@ BB6_4:
 	ld	hl, -8388608
 	ld	e, 63
 	call	__fcmp
-	jp	p, BB6_7
+	jp	p, BB6_4
 	call	_clock
 	ld	(ix - 3), hl
 	ld	(ix - 4), e
@@ -1180,10 +1720,11 @@ BB6_4:
 	ld	(hl), b
 	ld	a, 1
 	ld	(_draw), a
-BB6_7:
+BB6_4:
 	call	_handle_keypresses
-	jp	BB6_4
-BB6_8:
+	ld	iy, -720868
+	jp	BB6_1
+BB6_5:
 	ld	hl, (_cookie)
 	push	hl
 	call	_free
@@ -1197,84 +1738,84 @@ BB6_8:
 	section	.text,"ax",@progbits
 
 	section	.data,"aw",@progbits
-	public	_Tileset_tile_0_compressed
-_Tileset_tile_0_compressed:
-	db	")", 0, "", 0, "ú", 13, 0, 0, "m«\e«q——»0bs@ìç‚", 0, "Í6X#æS", 0, "<È/5", 0, "Ä", 0, "@"
+	public	_tileset_tile_0_data
+_tileset_tile_0_data:
+	db	"", 0, 0, "", 0, 0, 0, 0, "", 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, 0, "", 0, 0, 0, 0, 0, "", 0, 0, 0, 0, "", 0, 0, "", 0, 0, "", 0, 0, "", 0, 0, "", 0, 0, ""
 
 	section	.data,"aw",@progbits
-	public	_Tileset_tile_1_compressed
-_Tileset_tile_1_compressed:
-	db	"-", 0, "K%", 0, "œ	KqF", 0, "t˘˘", 10, "˘", 0, "‹.", 0, "dì", 0, "^II", 13, "OIö", 0, "", 0, "In≤", 0, "In", 10, "y KGG›GÒ2", 0, ",,º≥", 0, "«@", 0, 0, " "
+	public	_tileset_tile_1_data
+_tileset_tile_1_data:
+	db	"bbbbbbbbbbbbbbbbZZZbbbbbbbbZZZZZbbbZZZZZZZZZZbZZZ333ZZZbZZZZZZZZ__ZZZZ__________________]]]]]]]]]]]]]]11]]]]]]]]]1111111]]]"
 
 	section	.data,"aw",@progbits
-	public	_Tileset_tile_2_compressed
-_Tileset_tile_2_compressed:
-	db	"""", 0, "Õ<", 26, "G""./", 0, "@9ñ(/®Ñ$â""@Ç(", 26, "/,î1$", 26, "ÓØÔ!", 0, "ª", 0, "ÆÂ", 0, "Ù$U‹%V", 0, ""
+	public	_tileset_tile_2_data
+_tileset_tile_2_data:
+	db	"	4444Q		,44444		,4&4444QQ,44444QQ,44444&QQQ,,444&4QQQQQ,,,,,,4444Q,,4&4Q,,,444Q"
 
 	section	.data,"aw",@progbits
-	public	_Tileset_tile_3_compressed
-_Tileset_tile_3_compressed:
-	db	"!F", 0, "=", 0, "9D9º*", 0, "**ù9Ø", 10, "*", 0, "öK", 0, """∫!æ>m1H", 0, "ﬂ,gO=;ÿ[H;±", 0, "=>H);H>/ qF=ïEyu?!?\`""M?á†4(È", 0, ""
+	public	_tileset_tile_3_data
+_tileset_tile_3_data:
+	db	"MMMGG/MMMM//GG///G///////////MMM/G//GMMMG//M//G//^^^^^^^^^^G///^^MMMMMJ^^///MM^JMN^//GMMM^NMJ^MG//MM^NMN^MGG/G/^NMN^M/G//^JMN^/GGG^NMJ^/G^J"
 
 	section	.data,"aw",@progbits
-	public	_Tileset_tile_4_compressed
-_Tileset_tile_4_compressed:
-	db	"(4", 0, "<", 10, "'B", 0, "G4%<", 0, "àO", 10, 0, "0?74«0B3/B", 10, "Œ,4Bü	Ô", 0, "û—B‰<4¸>(BöO°9)geØ	Ì", 0, "	S", 0, "‹", 0, 0, ""
+	public	_tileset_tile_4_data
+_tileset_tile_4_data:
+	db	"<<<<LT<<<<<LTLLLLLLLTTPD<D<5T<DLTT<LTLTT<<TLT<TTT<TTLLTLTTTTLLTLTTL<LLT<TTL<LLT<TTLTTTTTTTLTTTTTT<TTT", 10, 10, 10, 10, "", 10, 10, 10, 10, ""
 
 	section	.data,"aw",@progbits
-	public	_Tileset_tile_5_compressed
-_Tileset_tile_5_compressed:
-	db	" π", 0, """q", 0, "J%", 0, "ã\!|/S2 å2è8", 0, "æ2i!ó""s1’4\""ó#r", 0, "ß!õ®", 0, ""
+	public	_tileset_tile_5_data
+_tileset_tile_5_data:
+	db	"$$$$$''''#'''$$$$$$$$#'''''#'''''$$$$$$$#''''''#'''''$$$$$##''''###'#"
 
 	section	.data,"aw",@progbits
-	public	_Tileset_tile_6_compressed
-_Tileset_tile_6_compressed:
-	db	"2", 0, "5", 0, "Ò#", 0, "L", 13, 13, "C1äb", 13, 0, "CC", 13, "!2", 0, "d”", 0, "ÄADEJEDAA8REF:ë/:3ú]ß û", 0, ""
+	public	_tileset_tile_6_data
+_tileset_tile_6_data:
+	db	"U6UU", 13, 13, 13, 13, 13, 13, 13, 13, "RWY`YWRFRWY`YWRFRWY`YWRFRWYYYWRFRWYYYWRHRWY`YWH:RWY`YH::RWYYH::!      "
 
 	section	.data,"aw",@progbits
-	public	_Tileset_tile_7_compressed
-_Tileset_tile_7_compressed:
-	db	" Ö", 0, "-!&◊5", 0, 13, "Ç#)5)#,+)E+™&(Q&¥", 0, "BB2ué 2", 0, ">S˘.‡", 0, ""
+	public	_tileset_tile_7_data
+_tileset_tile_7_data:
+	db	"22((======%.=.%%0.0%(0.0((((((", 26, "((((", 26, "7(((777(((777777", 26, "(", 26, "7777777"
 
 	section	.data,"aw",@progbits
-	public	_Tileset_tile_8_compressed
-_Tileset_tile_8_compressed:
-	db	" ", 0, "?†", 0, 0, ""
+	public	_tileset_tile_8_data
+_tileset_tile_8_data:
+	db	";;;;;;PPPKPPPPPPKPOOO;;KPPOAOO;;KKPPOO\AOPPOOOOOaaP@OOOaP@@@@@aP@@@@@@@@""II@@II@@-""II>>>I@@-""I>>*>""""I"">****>II"
 
 	section	.data,"aw",@progbits
-	public	_Tileset_tile_9_compressed
-_Tileset_tile_9_compressed:
-	db	" ", 0, "?†", 0, 0, ""
+	public	_tileset_tile_9_data
+_tileset_tile_9_data:
+	db	"C99))99999C99BB98)E9)8)9SSS9EE99))EVVSSSB9C9)EXVVVVBSS98CXX[[VSSS9)E9S[[SSVVVSCEC[[VVV[VVVB9[SSVVX[VSB9S[[SVXXSSB9SX[[SVVS9)9SXX[SVVS)8E9VVX[SVS8)EC9)SSSSSS9)EE99C)"
 
 	section	.data,"aw",@progbits
-	public	_Tileset_tile_10_compressed
-_Tileset_tile_10_compressed:
-	db	" ", 0, "?†", 0, 0, ""
+	public	_tileset_tile_10_data
+_tileset_tile_10_data:
+	db	""
 
 	section	.data,"aw",@progbits
-	public	_Tileset_tile_11_compressed
-_Tileset_tile_11_compressed:
-	db	" ", 0, "?†", 0, 0, ""
+	public	_tileset_tile_11_data
+_tileset_tile_11_data:
+	db	""
 
 	section	.data,"aw",@progbits
-	public	_Tileset_tile_12_compressed
-_Tileset_tile_12_compressed:
-	db	" ", 0, "?†", 0, 0, ""
+	public	_tileset_tile_12_data
+_tileset_tile_12_data:
+	db	""
 
 	section	.data,"aw",@progbits
-	public	_Tileset_tile_13_compressed
-_Tileset_tile_13_compressed:
-	db	" ", 0, "?†", 0, 0, ""
+	public	_tileset_tile_13_data
+_tileset_tile_13_data:
+	db	""
 
 	section	.data,"aw",@progbits
-	public	_Tileset_tile_14_compressed
-_Tileset_tile_14_compressed:
-	db	" ", 0, "?†", 0, 0, ""
+	public	_tileset_tile_14_data
+_tileset_tile_14_data:
+	db	""
 
 	section	.data,"aw",@progbits
-	public	_Tileset_tile_15_compressed
-_Tileset_tile_15_compressed:
-	db	" ", 0, "?†", 0, 0, ""
+	public	_tileset_tile_15_data
+_tileset_tile_15_data:
+	db	""
 
 	section	.data,"aw",@progbits
 	public	_quintillion
@@ -1294,6 +1835,11 @@ _trillion:
 	section	.bss,"aw",@nobits
 	public	_click
 _click:
+	rb	1
+
+	section	.bss,"aw",@nobits
+	public	_keyDown
+_keyDown:
 	rb	1
 
 	section	.data,"aw",@progbits
@@ -1316,15 +1862,25 @@ _cookies:
 _scale:
 	db	2
 
-	section	.data,"aw",@progbits
+	section	.bss,"aw",@nobits
 	public	_cps
 _cps:
-	dq	10
+	rb	8
 
 	section	.data,"aw",@progbits
 	public	_cpc
 _cpc:
 	dq	10
+
+	section	.bss,"aw",@nobits
+	public	_cursorx
+_cursorx:
+	rb	1
+
+	section	.bss,"aw",@nobits
+	public	_cursory
+_cursory:
+	rb	1
 
 	section	.data,"aw",@progbits
 	public	_buildingProductionRateMultiplier
@@ -1362,24 +1918,14 @@ _upgradeScalingFactor:
 	db	2
 
 	section	.bss,"aw",@nobits
-	public	_tile_x_pos
-_tile_x_pos:
-	rb	1
-
-	section	.bss,"aw",@nobits
-	public	_tile_y_pos
-_tile_y_pos:
-	rb	1
-
-	section	.bss,"aw",@nobits
 	public	_upgradeQuantities
 _upgradeQuantities:
-	rb	5
+	rb	16
 
 	section	.bss,"aw",@nobits
 	public	_buildingQuantities
 _buildingQuantities:
-	rb	10
+	rb	32
 
 	section	.bss,"aw",@nobits
 	public	_i
@@ -1394,32 +1940,32 @@ _text:
 	section	.rodata,"a",@progbits
 	private	_.str
 _.str:
-	db	"%.2f quintillion cookies%s", 0
+	db	"%.2f quint. cookies%s", 0
 
 	section	.rodata,"a",@progbits
 	private	_.str.1
 _.str.1:
-	db	"%.2f quadrillion cookies%s", 0
+	db	"%.2f quad. cookies%s", 0
 
 	section	.rodata,"a",@progbits
 	private	_.str.2
 _.str.2:
-	db	"%.2f trillion cookies%s", 0
+	db	"%.2f T cookies%s", 0
 
 	section	.rodata,"a",@progbits
 	private	_.str.3
 _.str.3:
-	db	"%.2f billion cookies%s", 0
+	db	"%.2f B cookies%s", 0
 
 	section	.rodata,"a",@progbits
 	private	_.str.4
 _.str.4:
-	db	"%.2f million cookies%s", 0
+	db	"%.2f M cookies%s", 0
 
 	section	.rodata,"a",@progbits
 	private	_.str.5
 _.str.5:
-	db	"%.2f thousand cookies%s", 0
+	db	"%.2f K cookies%s", 0
 
 	section	.rodata,"a",@progbits
 	private	_.str.6
@@ -1431,10 +1977,25 @@ _.str.6:
 _.str.7:
 	db	"%llu cookie%s", 0
 
-	section	.bss,"aw",@nobits
-	public	_tilemap
-_tilemap:
-	rb	18
+	section	.data,"aw",@progbits
+	public	_tileset_tiles_data
+_tileset_tiles_data:
+	dl	_tileset_tile_0_data
+	dl	_tileset_tile_1_data
+	dl	_tileset_tile_2_data
+	dl	_tileset_tile_3_data
+	dl	_tileset_tile_4_data
+	dl	_tileset_tile_5_data
+	dl	_tileset_tile_6_data
+	dl	_tileset_tile_7_data
+	dl	_tileset_tile_8_data
+	dl	_tileset_tile_9_data
+	dl	_tileset_tile_10_data
+	dl	_tileset_tile_11_data
+	dl	_tileset_tile_12_data
+	dl	_tileset_tile_13_data
+	dl	_tileset_tile_14_data
+	dl	_tileset_tile_15_data
 
 	section	.bss,"aw",@nobits
 	public	_cookie
@@ -1459,59 +2020,23 @@ _.str.10:
 	section	.rodata,"a",@progbits
 	private	_.str.11
 _.str.11:
+	db	"You have %u", 0
+
+	section	.rodata,"a",@progbits
+	private	_.str.12
+_.str.12:
 	db	"Cookie   Buildings   Upgrades   Achiev.  Settings", 0
-
-	section	.bss,"aw",@nobits
-	public	_tilemap_map
-_tilemap_map:
-	rb	12
-
-	section	.bss,"aw",@nobits
-	public	_tileset_tiles
-_tileset_tiles:
-	rb	384
-
-	section	.bss,"aw",@nobits
-	public	_tmp_ptr
-_tmp_ptr:
-	rb	3
-
-	section	.data,"aw",@progbits
-	public	_Tileset_tiles_compressed
-_Tileset_tiles_compressed:
-	dl	_Tileset_tile_0_compressed
-	dl	_Tileset_tile_1_compressed
-	dl	_Tileset_tile_2_compressed
-	dl	_Tileset_tile_3_compressed
-	dl	_Tileset_tile_4_compressed
-	dl	_Tileset_tile_5_compressed
-	dl	_Tileset_tile_6_compressed
-	dl	_Tileset_tile_7_compressed
-	dl	_Tileset_tile_8_compressed
-	dl	_Tileset_tile_9_compressed
-	dl	_Tileset_tile_10_compressed
-	dl	_Tileset_tile_11_compressed
-	dl	_Tileset_tile_12_compressed
-	dl	_Tileset_tile_13_compressed
-	dl	_Tileset_tile_14_compressed
-	dl	_Tileset_tile_15_compressed
 
 	section	.data,"aw",@progbits
 	public	_Cookie_compressed
 _Cookie_compressed:
-	db	" "" ì", 0, "6E", 0, "«««!ëÒ!©;– 6˜", 0, "« œ$<%\J8>.„c „ë@'ÒÅ¶", 0, "s¬2â'·d%'—_·∫ábx€— Ò?–†˚Ãté „<5lGz·)a`TR6è°∏L¯€eö ≈.* >c„P 'ƒ¸ ", 0, "+""h", 0, "Z", 0, "Ä", 0, "@"
+	db	" "" ì", 0, "?E", 0, "«««!ëÒ!©;– ?˜", 0, "« œ$<%\J8>.„c „ë@+ÒÅ¶", 0, "s¬2â+·d%+—_·∫ábx€— Ò?–†˚Ãté „<5lGz·)a`TR?è°∏L¯€eö ≈.* >c„P +ƒ¸ ", 0, "+""h", 0, "Z", 0, "Ä", 0, "@"
 
 	section	.data,"aw",@progbits
 	public	_global_palette
 _global_palette:
-	db	"ˇˇ", 0, 0, "‡ˇt%", 0, 0, "ú‚Ñbâ""ä√Øê“ê”êÇòô¢¢úÅ†9!É§óß°()ƒ,N0A1j1¡¥5#µFµ·∏9≠πr<ΩΩf=aΩÒΩ¶AÔ¡D&≈H≈¬E∆ªF†HÍ…0 RJ»Mr“", 10, "÷)VmVfZ¥⁄ä‚ßbˆb`fØf7k|kÒÓ4s-ÛdÙ(wM˜ww¸ˇ"
+	db	"ˇˇ", 0, 0, "‡ˇt%Œ7≠uú‚Ñbâ""ä√Øê“ê”êÇòô¢¢úÅ†9!É§óß°()ƒ,N0A1j1¡¥5#µFµãµ·∏9≠πr<ΩΩD=E=f=aΩ¨ΩÒΩ¶AÔ¡D&≈H≈¬E∆ªF†He…¶IÍ…J0 RJáÕ»M0Œ˜NÇQÈQr“	V", 10, "÷)VmVÈYfZqZ¥⁄ä‚ßb¥‚ˆb`fØf", 0, "i7k|k»mÒÓçÚ4s-ÛÖÛﬁsdÙ(wM˜ww‹{¸ˇ"
 
-	section	.data,"aw",@progbits
-	public	_tilemap_map_compressed
-_tilemap_map_compressed:
-	db	"	", 10, "", 13, ""
-
-	ident	"clang version 15.0.0 (https://github.com/CE-Programming/llvm-project 23b78267b5d376b232475d0805a937e54b61e0d0)"
 	ident	"clang version 15.0.0 (https://github.com/CE-Programming/llvm-project 23b78267b5d376b232475d0805a937e54b61e0d0)"
 	ident	"clang version 15.0.0 (https://github.com/CE-Programming/llvm-project 23b78267b5d376b232475d0805a937e54b61e0d0)"
 	ident	"clang version 15.0.0 (https://github.com/CE-Programming/llvm-project 23b78267b5d376b232475d0805a937e54b61e0d0)"
@@ -1526,25 +2051,27 @@ _tilemap_map_compressed:
 	extern	_gfx_SetPalette
 	extern	__sand
 	extern	__ishl
+	extern	__ftol
 	extern	__iand
 	extern	_gfx_FillRectangle
-	extern	__ixor
 	extern	__lladd
 	extern	_gfx_AllocSprite
+	extern	__ltof
 	extern	_zx7_Decompress
 	extern	_free
 	extern	__frameset
-	extern	_gfx_SetTransparentColor
 	extern	_gfx_SetTextBGColor
+	extern	_gfx_SetTransparentColor
 	extern	_sprintf
 	extern	_kb_Scan
 	extern	__lsub
+	extern	_pow
 	extern	_gfx_GetStringWidth
-	extern	_gfx_TransparentTilemap
+	extern	__llsub
 	extern	__ultof
-	extern	__fmul
 	extern	__ishru
 	extern	_gfx_SwapDraw
+	extern	__fmul
 	extern	_gfx_SetDraw
 	extern	__llcmpu
 	extern	__Unwind_SjLj_Unregister
@@ -1558,4 +2085,5 @@ _tilemap_map_compressed:
 	extern	_gfx_PrintStringXY
 	extern	_gfx_End
 	extern	__fcmp
+	extern	_gfx_TransparentSprite
 	extern	_clock

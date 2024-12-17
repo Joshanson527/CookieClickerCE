@@ -9,7 +9,7 @@ extern "C" {
 #define sprites_palette_offset 0
 #include "Cookie.h"
 #define tileset_palette_offset 0
-#include "Tileset.h"
+#include "tileset.h"
 
 #ifdef __cplusplus
 }

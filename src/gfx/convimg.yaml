@@ -1,12 +1,14 @@
 palettes:
   - name: global_palette
-    max-entries: 96
+    max-entries: 128
     fixed-entries:
       - color: {index: 0, r: 255, g: 255, b: 255} # White
       - color: {index: 1, r: 0, g: 0, b: 0} # Black
       - color: {index: 2, r: 255, g: 255, b: 0} # Yellow (transparent color)
-      - color: {index: 3, r: 77, g: 91, b: 161} # Darker blue
-      - color: {index: 4, r: 55, g: 65, b: 117} # Lighter blue
+      - color: {index: 3, r: 77, g: 91, b: 161} # Lighter blue
+      - color: {index: 4, r: 55, g: 65, b: 117} # Darker blue
+      - color: {index: 5, r: 107, g: 242, b: 116} # Light green
+      - color: {index: 6, r: 242, g: 107, b: 107} # Light red
     images: automatic
 
 converts:
@@ -17,12 +19,11 @@ converts:
       - Cookie.png
   - name: tileset
     palette: global_palette
-    compress: zx7
     tilesets:
       tile-width: 16
       tile-height: 16
       images:
-        - Tileset.png
+        - tileset.png
 
 outputs:
   - type: c

@@ -8,6 +8,7 @@ obj/src/main.c.bc: src\main.c \
   c:\Users\S378217\Calculator\CEdev\include\keypadc.h \
   c:\Users\S378217\Calculator\CEdev\include\stdio.h \
   c:\Users\S378217\Calculator\CEdev\include\stdarg.h \
-  c:\Users\S378217\Calculator\CEdev\include\time.h src\gfx\gfx.h \
-  src\gfx\global_palette.h src\gfx\Cookie.h src\gfx\Tileset.h \
-  src\tilemap\tilemap.c
+  c:\Users\S378217\Calculator\CEdev\include\time.h \
+  c:\Users\S378217\Calculator\CEdev\include\debug.h \
+  c:\Users\S378217\Calculator\CEdev\include\math.h src\gfx\gfx.h \
+  src\gfx\global_palette.h src\gfx\Cookie.h src\gfx\tileset.h

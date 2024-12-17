@@ -2,6 +2,6 @@ global_palette.h
 global_palette.c
 Cookie.h
 Cookie.c
-Tileset.h
-Tileset.c
+tileset.h
+tileset.c
 gfx.h
