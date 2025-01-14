@@ -7,22 +7,22 @@ Section          Base   Top    High   Length
 .init.reruncheck D1AA77 D1AA77             0h
 .init            D1AA77 D1AAA1            2Ah
 .fini            D1AAA1 D1AAD5            34h
-.text            D1AAD5 D1DBF3          311Eh
-.data            D1DBF3 D1EDE8          11F5h
-.rodata          D1EDE8 D1EFC4           1DCh
+.text            D1AAD5 D1DBED          3118h
+.data            D1DBED D1EDE2          11F5h
+.rodata          D1EDE2 D1EFC9           1E7h
 .init_array      000000 000000             0h
 .ctors           000000 000000             0h
 .dtors           000000 000000             0h
 .fini_array      000000 000000             0h
-.bss             D052C6 D05357 D13FD8     91h
+.bss             D052C6 D05353 D13FD8     8Dh
 .header          D1A87F D1A882             3h
 
 Label                                  Value
 ------------------------------------   ------
 ___low_bss                           = D052C6
-___len_bss                           = 000091
+___len_bss                           = 00008D
 ___heaptop                           = D13FD8
-___heapbot                           = D05357
+___heapbot                           = D05353
 ___libs                              = D1A9F7
 ___init_array_count                  = 000000
 ___ctors_count                       = 000000
@@ -87,14 +87,14 @@ __standard_malloc                    = D1B114
 __standard_free                      = D1B1E7
 __standard_realloc                   = D1B295
 __alloc_base                         = D052C6
-_heap_ptr                            = D1DBF3
+_heap_ptr                            = D1DBED
 _npf_vpprintf                        = D1B30B
-JTI0_0                               = D1EDE8
-JTI0_1                               = D1EE06
-JTI0_2                               = D1EE4B
-JTI0_3                               = D1EE6C
-JTI0_4                               = D1EE84
-JTI0_5                               = D1EE9C
+JTI0_0                               = D1EDE2
+JTI0_1                               = D1EE00
+JTI0_2                               = D1EE45
+JTI0_3                               = D1EE66
+JTI0_4                               = D1EE7E
+JTI0_5                               = D1EE96
 _npf_utoa_rev                        = D1CA75
 __printf_c                           = D1CB3D
 __vsnprintf_c                        = D1CB5C
@@ -105,9 +105,9 @@ __vsprintf_c                         = D1CC36
 __vprintf_c                          = D1CC55
 _npf_putc_std                        = D1CC75
 __sprintf_c                          = D1CC85
-_.str                                = D1EEB4
-_.str.1                              = D1EEB8
-_.str.2                              = D1EEBC
+_.str                                = D1EEAE
+_.str.1                              = D1EEB2
+_.str.2                              = D1EEB6
 _clock                               = D1CCAE
 _ldexpf                              = 0220DC
 _memset                              = D1CCB9
@@ -118,10 +118,10 @@ _pow                                 = 0220F8
 _sprintf                             = D1CC85
 _vprintf                             = D1CC55
 _vsnprintf                           = D1CB5C
-.missingappvar                       = D1EEC0
-.libloadname                         = D1EEC5
+.missingappvar                       = D1EEBA
+.libloadname                         = D1EEBF
 .libloadnamelen                      = 000007
-.webaddress                          = D1EECD
+.webaddress                          = D1EEC7
 ___init_clock                        = D1AA5C
 __start                              = D1AA77
 ___exithl                            = D1AAA1
@@ -132,68 +132,69 @@ _exit.sp                             = D1AAA2
 _exit.flash_wait_states              = D1AAAC
 _costCalculator                      = D1CCE6
 _updateCps                           = D1CE13
-_textBeautifier                      = D1CF48
-_printSprite                         = D1D1D2
-_redraw                              = D1D216
-_handle_keypresses                   = D1D6B4
-_main                                = D1DA92
-_tileset_tile_0_data                 = D1DBF6
-_tileset_tile_1_data                 = D1DCF8
-_tileset_tile_2_data                 = D1DDFA
-_tileset_tile_3_data                 = D1DEFC
-_tileset_tile_4_data                 = D1DFFE
-_tileset_tile_5_data                 = D1E100
-_tileset_tile_6_data                 = D1E202
-_tileset_tile_7_data                 = D1E304
-_tileset_tile_8_data                 = D1E406
-_tileset_tile_9_data                 = D1E508
-_tileset_tile_10_data                = D1E60A
-_tileset_tile_11_data                = D1E70C
-_tileset_tile_12_data                = D1E80E
-_tileset_tile_13_data                = D1E910
-_tileset_tile_14_data                = D1EA12
-_tileset_tile_15_data                = D1EB14
-_quintillion                         = D1EC16
-_quadrillion                         = D1EC1E
-_trillion                            = D1EC26
+_textBeautifier                      = D1CF12
+_printSprite                         = D1D19C
+_redraw                              = D1D1E0
+_handle_keypresses                   = D1D695
+_main                                = D1DAAE
+_tileset_tile_0_data                 = D1DBF0
+_tileset_tile_1_data                 = D1DCF2
+_tileset_tile_2_data                 = D1DDF4
+_tileset_tile_3_data                 = D1DEF6
+_tileset_tile_4_data                 = D1DFF8
+_tileset_tile_5_data                 = D1E0FA
+_tileset_tile_6_data                 = D1E1FC
+_tileset_tile_7_data                 = D1E2FE
+_tileset_tile_8_data                 = D1E400
+_tileset_tile_9_data                 = D1E502
+_tileset_tile_10_data                = D1E604
+_tileset_tile_11_data                = D1E706
+_tileset_tile_12_data                = D1E808
+_tileset_tile_13_data                = D1E90A
+_tileset_tile_14_data                = D1EA0C
+_tileset_tile_15_data                = D1EB0E
+_quintillion                         = D1EC10
+_quadrillion                         = D1EC18
+_trillion                            = D1EC20
 _click                               = D052CC
 _keyDown                             = D052CD
-_draw                                = D1EC2E
+_draw                                = D1EC28
 _page                                = D052CE
 _cookies                             = D052CF
-_scale                               = D1EC2F
+_scale                               = D1EC29
 _cps                                 = D052D7
-_cpc                                 = D1EC30
-_cursorx                             = D052DF
-_cursory                             = D052E0
-_buildingProductionRateMultiplier    = D1EC38
-_buildingBaseCost                    = D1EC39
-_buildingGrowthFactor                = D1EC3A
-_buildingScalingFactor               = D1EC3B
-_upgradeBaseCost                     = D1EC3C
-_upgradeGrowthFactor                 = D1EC3D
-_upgradeScalingFactor                = D1EC3E
-_upgradeQuantities                   = D052E1
-_buildingQuantities                  = D052F1
-_i                                   = D05311
-_text                                = D05314
-_.str                                = D1EEE2
-_.str.1                              = D1EEF8
-_.str.2                              = D1EF0D
-_.str.3                              = D1EF1E
-_.str.4                              = D1EF2F
-_.str.5                              = D1EF40
-_.str.6                              = D1EF51
-_.str.7                              = D1EF60
-_tileset_tiles_data                  = D1EC3F
-_cookie                              = D05354
-_.str.8                              = D1EF6E
-_.str.9                              = D1EF6F
-_.str.10                             = D1EF7B
-_.str.11                             = D1EF86
-_.str.12                             = D1EF92
-_Cookie_compressed                   = D1EC6F
-_global_palette                      = D1ED22
+_cpc                                 = D1EC2A
+_cursorx                             = D052DB
+_cursory                             = D052DC
+_buildingProductionRateMultiplier    = D1EC32
+_buildingBaseCost                    = D1EC33
+_buildingGrowthFactor                = D1EC34
+_buildingScalingFactor               = D1EC35
+_upgradeBaseCost                     = D1EC36
+_upgradeGrowthFactor                 = D1EC37
+_upgradeScalingFactor                = D1EC38
+_upgradeQuantities                   = D052DD
+_buildingQuantities                  = D052ED
+_i                                   = D0530D
+_text                                = D05310
+_.str                                = D1EEDC
+_.str.1                              = D1EEF2
+_.str.2                              = D1EF07
+_.str.3                              = D1EF18
+_.str.4                              = D1EF29
+_.str.5                              = D1EF3A
+_.str.6                              = D1EF4B
+_.str.7                              = D1EF5A
+_tileset_tiles_data                  = D1EC39
+_cookie                              = D05350
+_.str.8                              = D1EF68
+_.str.9                              = D1EF69
+_.str.10                             = D1EF75
+_.str.11                             = D1EF80
+_.str.12                             = D1EF8B
+_.str.13                             = D1EF97
+_Cookie_compressed                   = D1EC69
+_global_palette                      = D1ED1C
 lib.LibLoad                          = D1A9F7
 _#gfx_Begin                          = D1AA0A
 _#gfx_End                            = D1AA0E

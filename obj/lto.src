@@ -163,49 +163,46 @@ BB0_3:
 	section	.text,"ax",@progbits
 	public	_updateCps
 _updateCps:
-	ld	hl, -13
+	ld	hl, -10
 	call	__frameset
-	ld	de, 0
-	ld.sis	hl, 0
+	ld	bc, 0
+	xor	a, a
 	ld	iy, _cps
-	ld	(_cps), de
-	ld	(_cps+3), de
-	lea	iy, iy + 6
-	ld	(ix - 6), iy
-	ld	(iy), l
-	ld	(iy + 1), h
-	ld	hl, 16
-	push	de
-	pop	bc
-	ex	de, hl
+	ld	e, 63
+	ld	(_cps), bc
+	ld	(_cps+3), a
+	ld	bc, 16
+	lea	hl, iy + 3
+	ld	(ix - 3), hl
+	ld	iy, 0
 BB1_1:
-	push	bc
-	pop	hl
+	lea	hl, iy
 	ld	(_i), hl
 	or	a, a
-	sbc	hl, de
+	sbc	hl, bc
 	jp	nc, BB1_7
 	ld	hl, _upgradeQuantities
-	ld	(ix - 3), bc
+	lea	bc, iy
+	ld	(ix - 6), bc
 	add	hl, bc
 	ld	a, (hl)
 	cp	a, 1
 	ld	hl, -6291456
-	ld	e, 63
+	ld	c, e
 	jr	z, BB1_6
 	cp	a, 2
 	ld	hl, -4194304
-	ld	e, 63
+	ld	c, e
 	jr	z, BB1_6
 	cp	a, 3
 	ld	hl, 0
 	ld	a, 64
-	ld	e, a
+	ld	c, a
 	jr	z, BB1_6
 	ld	hl, -8388608
-	ld	e, 63
+	ld	c, e
 BB1_6:
-	ld	(ix - 10), e
+	ld	(ix - 10), c
 	ld	(ix - 9), hl
 	ld	a, (_buildingProductionRateMultiplier)
 	or	a, a
@@ -213,86 +210,61 @@ BB1_6:
 	push	hl
 	pop	bc
 	ld	c, a
-	ld	iyl, 0
-	ld	a, iyl
+	xor	a, a
 	call	__ultof
 	push	bc
-	pop	hl
+	pop	iy
 	ld	e, a
-	ld	bc, (ix - 3)
-	ld	a, iyl
+	ld	bc, (ix - 6)
+	xor	a, a
 	call	__ultof
-	ld	iyl, a
-	push	iy
+	ld	l, a
+	push	hl
 	push	bc
 	push	de
-	push	hl
+	push	iy
 	call	_pow
-	push	hl
-	pop	bc
-	ld	a, e
+	ld	(ix - 6), hl
 	pop	hl
 	pop	hl
 	pop	hl
 	pop	hl
-	call	__ftol
-	push	bc
-	pop	de
-	ld	hl, (_i)
-	ld	(ix - 3), hl
+	ld	iy, (_i)
+	lea	hl, iy
 	ld	c, 1
 	call	__ishl
 	push	hl
 	pop	bc
 	ld	hl, _buildingQuantities
 	add	hl, bc
-	ld	bc, (hl)
-	or	a, a
-	sbc	hl, hl
-	ld	l, c
-	ld	h, b
-	push	de
-	pop	bc
-	call	__imulu
-	push	hl
-	pop	bc
+	ld	hl, (hl)
+	ld	bc, 0
+	ld	c, l
+	ld	b, h
+	xor	a, a
+	call	__ultof
 	push	bc
-	pop	iy
-	add	iy, iy
-	sbc	hl, hl
-	ld	a, l
-	call	__ltof
-	ld	(ix - 13), bc
+	pop	hl
+	ld	d, a
+	ld	bc, (ix - 6)
+	ld	a, e
+	ld	e, d
+	call	__fmul
 	ld	hl, (_cps)
-	ld	iy, _cps
-	lea	iy, iy + 3
-	ld	de, (iy)
-	ld	iy, (ix - 6)
-	ld	bc, (iy)
-	call	__ulltof
-	push	hl
-	pop	iy
-	ld	d, e
-	ld	bc, (ix - 13)
+	ld	(ix - 6), hl
+	ld	hl, (ix - 3)
+	ld	d, (hl)
 	ld	hl, (ix - 9)
 	ld	e, (ix - 10)
 	call	__fmul
-	lea	hl, iy
+	ld	hl, (ix - 6)
 	ld	e, d
 	call	__fadd
-	push	bc
-	pop	hl
-	ld	e, a
-	call	__ftoull
-	ld	(_cps), hl
-	ld	(_cps+3), de
-	ld	hl, (ix - 6)
-	ld	(hl), c
-	inc	hl
-	ld	(hl), b
-	ld	bc, (ix - 3)
-	inc	bc
-	ld	de, 16
+	ld	e, 63
+	ld	(_cps), bc
+	ld	(_cps+3), a
+	inc	iy
+	ld	bc, 16
 	jp	BB1_1
 BB1_7:
 	ld	sp, ix
@@ -607,7 +579,7 @@ _printSprite:
 	section	.text,"ax",@progbits
 	public	_redraw
 _redraw:
-	ld	hl, -46
+	ld	hl, -43
 	call	__frameset
 	ld	l, 3
 	ld	(ix - 3), hl
@@ -615,7 +587,7 @@ _redraw:
 	ld	hl, _buildingQuantities
 	ld	(ix - 6), hl
 	ld	hl, _upgradeQuantities
-	ld	(ix - 12), hl
+	ld	(ix - 9), hl
 	push	de
 	call	_gfx_SetDraw
 	pop	hl
@@ -738,16 +710,13 @@ BB4_8:
 	pop	hl
 	pop	hl
 	ld	hl, (_cps)
-	ld	(ix - 3), hl
-	ld	de, (_cps+3)
-	ld	iy, _cps
-	lea	hl, iy + 6
-	ld	hl, (hl)
-	ld	bc, _.str.9
+	ld	a, (_cps+3)
+	ld	e, a
+	call	__ftoull
+	ld	iy, _.str.9
+	push	iy
 	push	bc
-	push	hl
 	push	de
-	ld	hl, (ix - 3)
 	push	hl
 	call	_textBeautifier
 	pop	hl
@@ -814,24 +783,23 @@ BB4_8:
 	call	_gfx_PrintStringXY
 	pop	hl
 	pop	hl
-	jp	BB4_30
+	jp	BB4_34
 BB4_9:
 	dec	l
 	ld	a, l
 	cp	a, 2
-	jp	nc, BB4_31
+	jp	nc, BB4_35
 	ld	de, 2
 	xor	a, a
-	ld	(ix - 22), a
+	ld	(ix - 16), a
 	ld	bc, 0
-	ld	(ix - 21), bc
 BB4_11:
 	push	bc
 	pop	hl
 	or	a, a
 	sbc	hl, de
-	jp	z, BB4_29
-	ld	(ix - 25), bc
+	jp	z, BB4_33
+	ld	(ix - 28), bc
 	push	bc
 	pop	hl
 	ld	bc, 160
@@ -840,37 +808,39 @@ BB4_11:
 	pop	iy
 	ld	de, 2
 	add	iy, de
-	ld	(ix - 28), iy
+	ld	(ix - 34), iy
 	ld	a, l
 	add	a, 4
 	ld	e, a
-	ld	(ix - 43), de
+	ld	(ix - 37), de
 	ld	de, 20
 	add	hl, de
-	ld	(ix - 37), hl
-	ld	iy, (ix - 6)
-	ld	l, (ix - 22)
-	ld	(ix - 18), hl
+	ld	(ix - 31), hl
+	ld	de, 2
+	ld	hl, (ix - 6)
+	ld	(ix - 25), hl
+	ld	l, (ix - 16)
+	ld	(ix - 15), hl
 	ld	hl, 16
-	ld	(ix - 9), hl
+	ld	(ix - 12), hl
 	ld	a, 4
-	ld	c, a
+	ld	l, a
+	ld	(ix - 19), hl
 	or	a, a
 	sbc	hl, hl
-	ld	(ix - 15), hl
 BB4_13:
-	ld	hl, (ix - 9)
-	ld	de, 240
+	push	hl
+	pop	iy
+	ld	bc, 8
 	or	a, a
-	sbc	hl, de
-	jp	z, BB4_28
-	ld	(ix - 31), bc
-	ld	(ix - 34), iy
+	sbc	hl, bc
+	jp	z, BB4_32
+	ld	(ix - 22), iy
 	ld	hl, 4
 	push	hl
 	call	_gfx_SetColor
 	pop	hl
-	ld	iy, (ix - 9)
+	ld	iy, (ix - 12)
 	ld	de, -14
 	add	iy, de
 	ld	hl, 26
@@ -879,7 +849,7 @@ BB4_13:
 	push	hl
 	ld	(ix - 40), iy
 	push	iy
-	ld	hl, (ix - 28)
+	ld	hl, (ix - 34)
 	push	hl
 	call	_gfx_FillRectangle
 	pop	hl
@@ -892,30 +862,38 @@ BB4_13:
 	ld	c, a
 	ld	a, (_cursory)
 	ld	e, a
-	ld	hl, (ix - 25)
+	ld	hl, (ix - 28)
 	or	a, a
 	sbc	hl, bc
-	ld	a, -1
+	ld	d, -1
+	ld	a, d
 	jr	z, BB4_16
 	ld	a, 0
 BB4_16:
 	lea	bc, iy
 	ld	c, e
-	ld	hl, (ix - 15)
+	ld	hl, (ix - 22)
 	or	a, a
 	sbc	hl, bc
-	ld	l, -1
+	ld	l, d
 	jr	z, BB4_18
 	ld	l, 0
 BB4_18:
 	and	a, l
-	bit	0, a
-	ld	a, 0
 	ld	l, a
-	jp	nz, BB4_20
-	ld	l, 3
+	ld	a, (_click)
+	or	a, a
+	ld	a, 0
+	ld	e, a
+	jr	z, BB4_20
+	ld	a, 5
+	ld	e, a
 BB4_20:
-	push	hl
+	bit	0, l
+	jp	nz, BB4_22
+	ld	e, 3
+BB4_22:
+	push	de
 	call	_gfx_SetColor
 	pop	hl
 	ld	hl, 26
@@ -924,26 +902,18 @@ BB4_20:
 	push	hl
 	ld	hl, (ix - 40)
 	push	hl
-	ld	hl, (ix - 28)
+	ld	hl, (ix - 34)
 	push	hl
 	call	_gfx_Rectangle
 	pop	hl
 	pop	hl
 	pop	hl
 	pop	hl
-	ld	hl, (ix - 21)
-	ld	de, (ix - 15)
-	add	hl, de
-	ld	de, 15
-	or	a, a
-	sbc	hl, de
-	jp	nc, BB4_27
-	ld	hl, (ix - 18)
-	inc	l
-	ld	de, (ix - 31)
-	push	de
-	ld	de, (ix - 43)
-	push	de
+	ld	hl, (ix - 19)
+	push	hl
+	ld	hl, (ix - 37)
+	push	hl
+	ld	hl, (ix - 15)
 	push	hl
 	push	hl
 	call	_printSprite
@@ -951,15 +921,39 @@ BB4_20:
 	pop	hl
 	pop	hl
 	pop	hl
+	ld	hl, 4
+	push	hl
+	call	_gfx_SetTextBGColor
+	pop	hl
 	ld	a, (_page)
 	ld	l, a
+	cp	a, 2
+	jr	nz, BB4_25
+	ld	iy, (ix - 9)
+	ld	de, (ix - 22)
+	add	iy, de
+	ld	a, (iy)
+	cp	a, 3
+	jr	nz, BB4_25
+	or	a, a
+	sbc	hl, hl
+	push	hl
+	call	_gfx_SetTextFGColor
+	pop	hl
+	ld	hl, _.str.11
+	push	hl
+	ld	hl, _text
+	push	hl
+	call	_sprintf
+	jp	BB4_28
+BB4_25:
 	dec	l
-	ld	de, (ix - 18)
+	ld	de, (ix - 15)
 	push	de
 	push	hl
 	call	_costCalculator
 	ld	(ix - 40), hl
-	ld	(ix - 46), de
+	ld	(ix - 43), de
 	pop	hl
 	pop	hl
 	ld	hl, (_cookies)
@@ -968,7 +962,7 @@ BB4_20:
 	lea	iy, iy + 6
 	ld	iy, (iy)
 	push	bc
-	ld	bc, (ix - 46)
+	ld	bc, (ix - 43)
 	push	bc
 	ld	bc, (ix - 40)
 	push	bc
@@ -980,21 +974,17 @@ BB4_20:
 	pop	hl
 	ld	a, 6
 	ld	l, a
-	jr	c, BB4_23
+	jr	c, BB4_27
 	ld	a, 5
 	ld	l, a
-BB4_23:
+BB4_27:
 	push	hl
 	call	_gfx_SetTextFGColor
-	pop	hl
-	ld	hl, 4
-	push	hl
-	call	_gfx_SetTextBGColor
 	pop	hl
 	ld	a, (_page)
 	ld	l, a
 	dec	l
-	ld	de, (ix - 18)
+	ld	de, (ix - 15)
 	push	de
 	push	hl
 	call	_costCalculator
@@ -1008,13 +998,14 @@ BB4_23:
 	call	_textBeautifier
 	pop	hl
 	pop	hl
+BB4_28:
 	pop	hl
 	pop	hl
-	ld	hl, (ix - 9)
+	ld	hl, (ix - 12)
 	ld	de, -10
 	add	hl, de
 	push	hl
-	ld	hl, (ix - 37)
+	ld	hl, (ix - 31)
 	push	hl
 	ld	hl, _text
 	push	hl
@@ -1029,24 +1020,24 @@ BB4_23:
 	pop	hl
 	ld	a, (_page)
 	cp	a, 1
-	jr	nz, BB4_25
-	ld	hl, (ix - 34)
+	jr	nz, BB4_30
+	ld	hl, (ix - 25)
 	ld	de, (hl)
 	or	a, a
 	sbc	hl, hl
 	ld	l, e
 	ld	h, d
-	jr	BB4_26
-BB4_25:
-	ld	iy, (ix - 12)
-	ld	de, (ix - 15)
+	jr	BB4_31
+BB4_30:
+	ld	iy, (ix - 9)
+	ld	de, (ix - 22)
 	add	iy, de
 	or	a, a
 	sbc	hl, hl
 	ld	l, (iy)
-BB4_26:
+BB4_31:
 	push	hl
-	ld	hl, _.str.11
+	ld	hl, _.str.12
 	push	hl
 	ld	hl, _text
 	push	hl
@@ -1054,9 +1045,9 @@ BB4_26:
 	pop	hl
 	pop	hl
 	pop	hl
-	ld	hl, (ix - 9)
+	ld	hl, (ix - 12)
 	push	hl
-	ld	hl, (ix - 37)
+	ld	hl, (ix - 31)
 	push	hl
 	ld	hl, _text
 	push	hl
@@ -1064,43 +1055,41 @@ BB4_26:
 	pop	hl
 	pop	hl
 	pop	hl
-BB4_27:
-	ld	hl, (ix - 15)
-	inc	hl
-	ld	(ix - 15), hl
-	ld	hl, (ix - 31)
+	ld	bc, (ix - 22)
+	inc	bc
+	ld	hl, (ix - 19)
 	ld	a, l
 	add	a, 28
-	ld	c, a
+	ld	l, a
+	ld	(ix - 19), hl
 	ld	de, 28
-	ld	hl, (ix - 9)
+	ld	hl, (ix - 12)
 	add	hl, de
-	ld	(ix - 9), hl
-	ld	hl, (ix - 18)
+	ld	(ix - 12), hl
+	ld	hl, (ix - 15)
 	inc	l
-	ld	(ix - 18), hl
-	ld	iy, (ix - 34)
+	ld	(ix - 15), hl
+	ld	iy, (ix - 25)
 	lea	iy, iy + 2
+	ld	(ix - 25), iy
+	ld	de, 2
+	push	bc
+	pop	hl
 	jp	BB4_13
-BB4_28:
-	ld	bc, (ix - 25)
+BB4_32:
+	ld	bc, (ix - 28)
 	inc	bc
-	ld	de, 10
-	ld	hl, (ix - 21)
-	add	hl, de
-	ld	(ix - 21), hl
-	ld	a, (ix - 22)
+	ld	a, (ix - 16)
 	add	a, 8
-	ld	(ix - 22), a
-	ld	iy, (ix - 12)
+	ld	(ix - 16), a
+	ld	iy, (ix - 9)
 	lea	iy, iy + 8
-	ld	(ix - 12), iy
+	ld	(ix - 9), iy
 	ld	iy, (ix - 6)
 	lea	iy, iy + 16
 	ld	(ix - 6), iy
-	ld	de, 2
 	jp	BB4_11
-BB4_29:
+BB4_33:
 	or	a, a
 	sbc	hl, hl
 	push	hl
@@ -1109,10 +1098,10 @@ BB4_29:
 	ld	hl, 3
 	push	hl
 	call	_gfx_SetTextBGColor
-BB4_30:
+BB4_34:
 	pop	hl
-BB4_31:
-	ld	hl, _.str.12
+BB4_35:
+	ld	hl, _.str.13
 	push	hl
 	call	_gfx_GetStringWidth
 	pop	de
@@ -1128,7 +1117,7 @@ BB4_31:
 	ld	de, 230
 	push	de
 	push	hl
-	ld	hl, _.str.12
+	ld	hl, _.str.13
 	push	hl
 	call	_gfx_PrintStringXY
 	pop	hl
@@ -1161,18 +1150,19 @@ _handle_keypresses:
 	ld	l, a
 	ld	a, (_page)
 	ld	c, a
+	ld	(ix - 3), bc
 	bit	5, e
 	ld	iy, _cookies
 	lea	de, iy + 3
 	ld	(ix - 9), de
 	lea	de, iy + 6
 	ld	(ix - 6), de
-	ld	(ix - 3), bc
 	jp	z, BB5_10
 	ld	a, l
 	or	a, a
 	jp	nz, BB5_10
-	ld	a, c
+	ld	de, (ix - 3)
+	ld	a, e
 	or	a, a
 	ld	iy, -720878
 	jp	nz, BB5_11
@@ -1253,16 +1243,16 @@ BB5_9:
 BB5_10:
 	ld	iy, -720878
 BB5_11:
+	ld.sis	bc, 1
 	ld	e, (iy)
 	ld	d, (iy + 1)
 	ld	a, e
 	bit	5, a
-	ld	d, 1
 	jr	nz, BB5_15
 	ld	a, l
 	or	a, a
 	jr	z, BB5_14
-	ld	a, d
+	ld	a, 1
 	ld	(_draw), a
 BB5_14:
 	xor	a, a
@@ -1276,7 +1266,6 @@ BB5_15:
 	ld	l, e
 	ld	h, d
 	pop	de
-	ld.sis	bc, 1
 	call	__sand
 	bit	0, l
 	jr	z, BB5_19
@@ -1285,7 +1274,7 @@ BB5_15:
 	ld	a, (_keyDown)
 	ld	e, a
 	ld	a, l
-	cp	a, 9
+	cp	a, 7
 	jr	z, BB5_19
 	ld	a, e
 	or	a, a
@@ -1293,7 +1282,7 @@ BB5_15:
 	inc	l
 	ld	a, l
 	ld	(_cursory), a
-	ld	a, d
+	ld	a, 1
 	ld	(_keyDown), a
 	ld	(_draw), a
 BB5_19:
@@ -1321,7 +1310,7 @@ BB5_19:
 	dec	l
 	ld	a, l
 	ld	(_cursory), a
-	ld	a, d
+	ld	a, 1
 	ld	(_keyDown), a
 	ld	(_draw), a
 BB5_23:
@@ -1335,6 +1324,7 @@ BB5_23:
 	pop	de
 	ld	a, l
 	bit	2, a
+	ld.sis	bc, 1
 	jr	z, BB5_27
 	ld	a, (_cursorx)
 	ld	l, a
@@ -1349,7 +1339,7 @@ BB5_23:
 	inc	l
 	ld	a, l
 	ld	(_cursorx), a
-	ld	a, d
+	ld	a, 1
 	ld	(_keyDown), a
 	ld	(_draw), a
 BB5_27:
@@ -1377,14 +1367,13 @@ BB5_27:
 	dec	l
 	ld	a, l
 	ld	(_cursorx), a
-	ld	a, d
+	ld	a, 1
 	ld	(_keyDown), a
 	ld	(_draw), a
 BB5_31:
 	ld	iy, -720866
 	ld	l, (iy)
 	ld	h, (iy + 1)
-	ld.sis	bc, 1
 	call	__sand
 	bit	0, l
 	jr	nz, BB5_36
@@ -1406,29 +1395,35 @@ BB5_31:
 	xor	a, a
 	ld	(_keyDown), a
 BB5_36:
-	ld	iy, -720878
-	ld	l, (iy)
-	ld	h, (iy + 1)
+	ld	b, 3
+	ld	hl, -720878
+	push	de
+	ld	e, (hl)
+	inc	hl
+	ld	d, (hl)
+	ld	l, e
+	ld	h, d
+	pop	de
 	ld	a, l
 	bit	5, a
-	ld	bc, (ix - 3)
-	jp	z, BB5_44
-	dec	c
-	ld	a, c
+	jp	z, BB5_47
+	ld	hl, (ix - 3)
+	dec	l
+	push	hl
+	pop	iy
+	ld	a, l
 	cp	a, 2
-	jp	nc, BB5_44
-	ld	e, 10
+	jp	nc, BB5_47
 	ld	a, (_cursorx)
-	ld	d, a
-	ld	(ix - 18), de
-	mlt	de
-	ld	a, (_cursory)
+	call	__bshl
 	ld	l, a
-	ld	a, e
-	add	a, l
+	ld	a, (_cursory)
+	ld	e, a
+	ld	a, l
+	add	a, e
 	ld	l, a
 	push	hl
-	push	bc
+	push	iy
 	call	_costCalculator
 	ld	(ix - 3), hl
 	ld	(ix - 12), de
@@ -1438,37 +1433,64 @@ BB5_36:
 	ld	de, (_cookies+3)
 	ld	iy, (ix - 6)
 	ld	iy, (iy)
-	ld	(ix - 15), iy
 	ld	a, (_click)
 	push	bc
 	ld	bc, (ix - 12)
 	push	bc
 	ld	bc, (ix - 3)
 	push	bc
-	ld	iy, -720878
-	ld	bc, (ix - 15)
+	ld	c, iyl
+	ld	b, iyh
 	call	__llcmpu
-	ld	d, 1
+	ld	b, 3
 	pop	hl
 	pop	hl
 	pop	hl
-	jp	c, BB5_44
+	jp	c, BB5_47
 	or	a, a
-	jp	nz, BB5_44
+	jp	nz, BB5_47
 	ld	a, (_page)
-	ld	e, a
-	dec	e
+	ld	iyl, a
 	ld	a, (_cursorx)
-	ld	bc, (ix - 18)
-	ld	b, a
-	mlt	bc
-	ld	a, (_cursory)
-	ld	l, a
+	ld	c, a
+	ld	a, iyl
+	cp	a, 2
+	jr	nz, BB5_42
+	ld	de, 0
+	ld	e, c
 	ld	a, c
+	ld	c, 3
+	push	de
+	pop	hl
+	call	__ishl
+	ld	c, a
+	ld	b, 3
+	ld	a, (_cursory)
+	ld	e, a
+	ld	(ix - 12), de
+	add	hl, de
+	ld	(ix - 3), hl
+	ld	hl, _upgradeQuantities
+	ld	de, (ix - 3)
+	add	hl, de
+	ld	de, (ix - 12)
+	ld	a, (hl)
+	cp	a, 4
+	jr	c, BB5_43
+	jp	BB5_47
+BB5_42:
+	ld	a, (_cursory)
+	ld	e, a
+BB5_43:
+	dec	iyl
+	ld	a, c
+	call	__bshl
+	ld	l, a
+	ld	a, e
 	add	a, l
 	ld	l, a
 	push	hl
-	push	de
+	push	iy
 	call	_costCalculator
 	ld	(ix - 3), hl
 	ld	(ix - 12), de
@@ -1498,21 +1520,21 @@ BB5_36:
 	inc	hl
 	ld	(hl), b
 	ld	a, (_page)
-	ld	iyl, a
+	ld	b, a
 	ld	a, (_cursorx)
 	ld	de, 0
 	ld	e, a
+	ld	c, 3
 	push	de
 	pop	hl
-	ld	bc, 10
-	call	__imulu
+	call	__ishl
 	ld	a, (_cursory)
 	ld	e, a
 	add	hl, de
 	ex	de, hl
-	ld	a, iyl
+	ld	a, b
 	cp	a, 1
-	jr	nz, BB5_42
+	jr	nz, BB5_45
 	ld	iy, _buildingQuantities
 	ld	c, 1
 	ex	de, hl
@@ -1524,80 +1546,80 @@ BB5_36:
 	inc.sis	hl
 	ld	(iy), l
 	ld	(iy + 1), h
-	jr	BB5_43
-BB5_42:
+	jr	BB5_46
+BB5_45:
 	ld	hl, _upgradeQuantities
 	add	hl, de
 	inc	(hl)
-BB5_43:
+BB5_46:
 	call	_updateCps
-	ld	d, 1
-	ld	a, d
+	ld	a, 1
 	ld	(_click), a
 	ld	(_draw), a
+	ld	b, 3
+BB5_47:
 	ld	iy, -720878
-BB5_44:
 	ld	l, (iy)
 	ld	h, (iy + 1)
 	ld	a, l
 	bit	4, a
-	jr	nz, BB5_50
-	ld	l, (iy)
-	ld	h, (iy + 1)
-	ld	a, l
-	bit	3, a
-	jr	nz, BB5_52
-	ld	l, (iy)
-	ld	h, (iy + 1)
-	ld	a, l
-	bit	2, a
 	jr	nz, BB5_53
 	ld	l, (iy)
 	ld	h, (iy + 1)
 	ld	a, l
-	bit	1, a
+	bit	3, a
+	jr	nz, BB5_55
+	ld	l, (iy)
+	ld	h, (iy + 1)
+	ld	a, l
+	bit	2, a
 	jr	nz, BB5_56
+	ld	l, (iy)
+	ld	h, (iy + 1)
+	ld	a, l
+	bit	1, a
+	jr	nz, BB5_59
 	ld	l, (iy)
 	ld	h, (iy + 1)
 	ld.sis	bc, 1
 	call	__sand
 	bit	0, l
-	jr	z, BB5_55
+	jr	z, BB5_58
 	ld	a, 4
-	jr	BB5_51
-BB5_50:
-	xor	a, a
-BB5_51:
-	ld	(_page), a
-	ld	a, d
-	ld	(_draw), a
-	jr	BB5_55
-BB5_52:
-	ld	a, d
-	ld	(_page), a
 	jr	BB5_54
 BB5_53:
+	xor	a, a
+BB5_54:
+	ld	(_page), a
+	ld	a, 1
+	ld	(_draw), a
+	jr	BB5_58
+BB5_55:
+	ld	a, 1
+	ld	(_page), a
+	jr	BB5_57
+BB5_56:
 	ld	a, 2
 	ld	(_page), a
-	ld	a, d
-BB5_54:
+	dec	a
+BB5_57:
 	ld	(_draw), a
 	xor	a, a
 	ld	(_cursorx), a
 	ld	(_cursory), a
-BB5_55:
+BB5_58:
 	ld	sp, ix
 	pop	ix
 	ret
-BB5_56:
-	ld	a, 3
-	jr	BB5_51
+BB5_59:
+	ld	a, b
+	jr	BB5_54
 	section	.text,"ax",@progbits
 
 	section	.text,"ax",@progbits
 	public	_main
 _main:
-	ld	hl, -22
+	ld	hl, -7
 	call	__frameset
 	ld	hl, _malloc
 	push	hl
@@ -1648,14 +1670,8 @@ _main:
 	call	_kb_Scan
 	call	_clock
 	ld	iy, -720868
-	lea	bc, iy
 	ld	(ix - 3), hl
 	ld	(ix - 4), e
-	ld	iy, _cps
-	lea	hl, iy + 6
-	ld	(ix - 7), hl
-	push	bc
-	pop	iy
 BB6_1:
 	ld	l, (iy)
 	ld	h, (iy + 1)
@@ -1685,39 +1701,31 @@ BB6_1:
 	ld	(ix - 3), hl
 	ld	(ix - 4), e
 	ld	hl, (_cps)
-	ld	(ix - 13), hl
-	ld	hl, (_cps+3)
-	ld	(ix - 19), hl
-	ld	hl, (ix - 7)
-	ld	de, (hl)
+	ld	(ix - 7), hl
+	ld	a, (_cps+3)
 	ld	hl, (_cookies)
-	ld	(ix - 16), hl
-	ld	hl, _cookies
-	push	hl
-	pop	iy
-	lea	hl, iy + 3
-	ld	hl, (hl)
-	ld	(ix - 22), hl
-	lea	hl, iy + 6
-	ld	(ix - 10), hl
-	ld	bc, (hl)
+	ld	de, _cookies
 	push	de
-	ld	hl, (ix - 19)
-	push	hl
-	ld	hl, (ix - 13)
-	push	hl
-	ld	hl, (ix - 16)
-	ld	de, (ix - 22)
-	call	__lladd
+	pop	bc
+	push	bc
 	pop	iy
+	lea	iy, iy + 3
+	ld	de, (iy)
+	push	bc
 	pop	iy
-	pop	iy
+	lea	iy, iy + 6
+	ld	bc, (iy)
+	call	__ulltof
+	ld	bc, (ix - 7)
+	call	__fadd
+	push	bc
+	pop	hl
+	ld	e, a
+	call	__ftoull
 	ld	(_cookies), hl
 	ld	(_cookies+3), de
-	ld	hl, (ix - 10)
-	ld	(hl), c
-	inc	hl
-	ld	(hl), b
+	ld	(iy), c
+	ld	(iy + 1), b
 	ld	a, 1
 	ld	(_draw), a
 BB6_4:
@@ -1760,7 +1768,7 @@ _tileset_tile_3_data:
 	section	.data,"aw",@progbits
 	public	_tileset_tile_4_data
 _tileset_tile_4_data:
-	db	"<<<<LT<<<<<LTLLLLLLLTTPD<D<5T<DLTT<LTLTT<<TLT<TTT<TTLLTLTTTTLLTLTTL<LLT<TTL<LLT<TTLTTTTTTTLTTTTTT<TTT", 10, 10, 10, 10, "", 10, 10, 10, 10, ""
+	db	"<<<<LT<<<<<LTLLLLLLLTTPD<D<5T<DLTT<LTLTT<<TLT<TTT<TTLLTLTTTTLLTLTTL<LLT<TTL<LLT<TTLTTTTTTTLTTTTTT<TTT", 10, 10, 10, "", 10, 10, 10, 10, ""
 
 	section	.data,"aw",@progbits
 	public	_tileset_tile_5_data
@@ -1780,7 +1788,7 @@ _tileset_tile_7_data:
 	section	.data,"aw",@progbits
 	public	_tileset_tile_8_data
 _tileset_tile_8_data:
-	db	";;;;;;PPPKPPPPPPKPOOO;;KPPOAOO;;KKPPOO\AOPPOOOOOaaP@OOOaP@@@@@aP@@@@@@@@""II@@II@@-""II>>>I@@-""I>>*>""""I"">****>II"
+	db	";;;;;PPPKPPPPPPKPOOO;;KPOAOO;;KKPPO\AOPPOOOOaaP@OOaP@@@@@aP@@@@@@@""II@@II@@""II>>>I@@-""I>>*>""""I"">****>II"
 
 	section	.data,"aw",@progbits
 	public	_tileset_tile_9_data
@@ -1790,32 +1798,32 @@ _tileset_tile_9_data:
 	section	.data,"aw",@progbits
 	public	_tileset_tile_10_data
 _tileset_tile_10_data:
-	db	""
+	db	""
 
 	section	.data,"aw",@progbits
 	public	_tileset_tile_11_data
 _tileset_tile_11_data:
-	db	""
+	db	""
 
 	section	.data,"aw",@progbits
 	public	_tileset_tile_12_data
 _tileset_tile_12_data:
-	db	""
+	db	""
 
 	section	.data,"aw",@progbits
 	public	_tileset_tile_13_data
 _tileset_tile_13_data:
-	db	""
+	db	""
 
 	section	.data,"aw",@progbits
 	public	_tileset_tile_14_data
 _tileset_tile_14_data:
-	db	""
+	db	""
 
 	section	.data,"aw",@progbits
 	public	_tileset_tile_15_data
 _tileset_tile_15_data:
-	db	""
+	db	""
 
 	section	.data,"aw",@progbits
 	public	_quintillion
@@ -1865,12 +1873,12 @@ _scale:
 	section	.bss,"aw",@nobits
 	public	_cps
 _cps:
-	rb	8
+	rb	4
 
 	section	.data,"aw",@progbits
 	public	_cpc
 _cpc:
-	dq	10
+	dq	100
 
 	section	.bss,"aw",@nobits
 	public	_cursorx
@@ -1905,7 +1913,7 @@ _buildingScalingFactor:
 	section	.data,"aw",@progbits
 	public	_upgradeBaseCost
 _upgradeBaseCost:
-	db	50
+	db	150
 
 	section	.data,"aw",@progbits
 	public	_upgradeGrowthFactor
@@ -1915,7 +1923,7 @@ _upgradeGrowthFactor:
 	section	.data,"aw",@progbits
 	public	_upgradeScalingFactor
 _upgradeScalingFactor:
-	db	2
+	db	3
 
 	section	.bss,"aw",@nobits
 	public	_upgradeQuantities
@@ -2020,11 +2028,16 @@ _.str.10:
 	section	.rodata,"a",@progbits
 	private	_.str.11
 _.str.11:
-	db	"You have %u", 0
+	db	"Max level!", 0
 
 	section	.rodata,"a",@progbits
 	private	_.str.12
 _.str.12:
+	db	"You have %u", 0
+
+	section	.rodata,"a",@progbits
+	private	_.str.13
+_.str.13:
 	db	"Cookie   Buildings   Upgrades   Achiev.  Settings", 0
 
 	section	.data,"aw",@progbits
@@ -2041,8 +2054,8 @@ _global_palette:
 	ident	"clang version 15.0.0 (https://github.com/CE-Programming/llvm-project 23b78267b5d376b232475d0805a937e54b61e0d0)"
 	ident	"clang version 15.0.0 (https://github.com/CE-Programming/llvm-project 23b78267b5d376b232475d0805a937e54b61e0d0)"
 	ident	"clang version 15.0.0 (https://github.com/CE-Programming/llvm-project 23b78267b5d376b232475d0805a937e54b61e0d0)"
-	extern	_gfx_SetTextTransparentColor
 	extern	__Unwind_SjLj_Register
+	extern	_gfx_SetTextTransparentColor
 	extern	_malloc
 	extern	_gfx_SetTextFGColor
 	extern	_gfx_Begin
@@ -2056,7 +2069,6 @@ _global_palette:
 	extern	_gfx_FillRectangle
 	extern	__lladd
 	extern	_gfx_AllocSprite
-	extern	__ltof
 	extern	_zx7_Decompress
 	extern	_free
 	extern	__frameset
