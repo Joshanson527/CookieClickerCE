@@ -1878,7 +1878,7 @@ _cps:
 	section	.data,"aw",@progbits
 	public	_cpc
 _cpc:
-	dq	100
+	dq	1
 
 	section	.bss,"aw",@nobits
 	public	_cursorx

@@ -30,7 +30,7 @@ uint8_t page = 0;
 uint64_t cookies = 0;
 uint8_t scale = 2;
 double cps = 0;
-uint64_t cpc = 100;
+uint64_t cpc = 1;
 char text[64];
 unsigned int i;
 
